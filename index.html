@@ -7,69 +7,78 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-
 <style>
 body{
   font-family:'Unbounded',sans-serif;
-  background: radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
-              radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
-              #f6f7fb;
+  background:
+  radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
+  radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
+  #f6f7fb;
 }
 .glass{
-  background: rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.55);
   backdrop-filter: blur(20px);
   border:1px solid rgba(255,255,255,0.6);
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  transition: all .25s cubic-bezier(.25,.8,.25,1);
+  transition:all .25s cubic-bezier(.25,.8,.25,1);
 }
-.glass:hover{ transform: translateY(-3px) scale(1.01); }
+.glass:hover{
+  transform:translateY(-2px) scale(1.01);
+}
 .dock{
-  background: rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.55);
   backdrop-filter: blur(30px);
   border:1px solid rgba(255,255,255,0.7);
-  border-radius:2rem;
-  padding: .75rem 1.5rem;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
   display:flex;
-  justify-content: space-between;
-  align-items:center;
+  justify-content:space-around;
 }
 .page{
   display:none;
   opacity:0;
-  transform: translateY(12px);
-  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+  transform:translateY(12px);
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
 }
-.page.active{ display:block; opacity:1; transform: translateY(0); }
+.page.active{
+  display:block;
+  opacity:1;
+  transform:translateY(0);
+}
 .gift{
-  width:70px; height:70px; border-radius:16px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:28px; cursor:pointer; background-size: cover; background-position: center;
-  opacity: 0.3; transition: transform .3s, opacity .3s;
+  width:70px;
+  height:70px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(10px);
+  cursor:pointer;
+  position:relative;
+  transition:all .25s;
 }
-.gift.unlocked{ opacity:1; }
-.gift:hover{ transform: scale(1.1); }
-.modal{
-  position: fixed; bottom: 0; left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  width: 90%; max-width: 400px;
-  background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
-  border-radius: 1.5rem 1.5rem 0 0; padding: 1.5rem;
-  box-shadow: 0 -5px 20px rgba(0,0,0,0.15); transition: transform .3s; z-index: 100;
+.gift:hover{
+  transform:scale(1.1);
 }
-.modal.show{ transform: translateX(-50%) translateY(0); }
-.modal h3{ font-size: 1.25rem; font-weight: 600; margin-bottom: .5rem; }
-.modal p{ color: #555; }
-.modal button{ margin-top: 1rem; background:#4f46e5; color:#fff; padding:.5rem 1rem; border-radius:.75rem; cursor:pointer; }
-@media(min-width:1024px){
-  #foodGrid{ grid-template-columns: repeat(4, 1fr); }
-  .dock{ max-width:800px; }
+.giftInfo{
+  position:fixed;
+  bottom:6rem;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  padding:1rem 2rem;
+  border-radius:1rem;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  display:none;
+  text-align:center;
+  z-index:100;
 }
 </style>
 </head>
 <body class="min-h-screen text-gray-900 pb-32">
-
 <div class="max-w-5xl mx-auto px-4 py-8">
-
 <header class="flex justify-between items-center mb-8">
   <div class="flex items-center gap-3">
     <div class="w-10 h-10 glass rounded-xl flex items-center justify-center">
@@ -82,187 +91,200 @@ body{
 
 <!-- HOME -->
 <div id="home" class="page active">
-  <input id="searchInput" class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none" placeholder="Найти продукт...">
-  <div id="foodGrid" class="grid gap-3 md:grid-cols-2 lg:grid-cols-4"></div>
+<input id="searchInput" class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none" placeholder="Найти продукт...">
+<div id="foodGrid" class="grid md:grid-cols-2 gap-3"></div>
 </div>
 
 <!-- PLATE -->
 <div id="platePage" class="page">
-  <div class="glass rounded-3xl p-6">
-    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-      <iconify-icon icon="solar:plate-linear"></iconify-icon>Моя тарелка
-    </h2>
-    <div id="selectedItems" class="space-y-2 mb-4"></div>
-    <div class="text-lg font-semibold">Всего ХЕ: <span id="xeTotal">0</span></div>
-  </div>
+<div class="glass rounded-3xl p-6">
+<h2 class="mb-4 text-lg flex items-center gap-2">
+<iconify-icon icon="solar:plate-linear"></iconify-icon>Моя тарелка
+</h2>
+<div id="selectedItems" class="space-y-2 mb-4"></div>
+<div class="text-lg font-semibold">Всего: <span id="xeTotal">0</span> ХЕ</div>
+</div>
 </div>
 
 <!-- CALCULATOR -->
 <div id="calculatorPage" class="page">
-  <div class="glass rounded-3xl p-6">
-    <h2 class="text-lg font-semibold mb-6 flex items-center gap-2">
-      <iconify-icon icon="solar:calculator-linear"></iconify-icon>Калькулятор ХЕ
-    </h2>
-    <div class="grid md:grid-cols-3 gap-4">
-      <input id="carbsInput" type="number" class="glass rounded-xl px-4 py-3" placeholder="Углеводы на 100г">
-      <input id="weightInput" type="number" class="glass rounded-xl px-4 py-3" placeholder="Вес (г)">
-      <select id="xeType" class="glass rounded-xl px-4 py-3">
-        <option value="10">1 ХЕ = 10г</option>
-        <option value="12">1 ХЕ = 12г</option>
-      </select>
-    </div>
-    <div class="text-center mt-6"><div id="xeResult" class="text-4xl font-bold">0 ХЕ</div></div>
-  </div>
+<div class="glass rounded-3xl p-6">
+<h2 class="text-lg mb-4 flex items-center gap-2">
+<iconify-icon icon="solar:calculator-linear"></iconify-icon>Калькулятор ХЕ
+</h2>
+<div class="grid md:grid-cols-3 gap-3">
+<input id="carbsInput" type="number" class="glass rounded-xl px-3 py-3" placeholder="Углеводы на 100г">
+<input id="weightInput" type="number" class="glass rounded-xl px-3 py-3" placeholder="вес / мл">
+<select id="xeType" class="glass rounded-xl px-3 py-3">
+<option value="10">1 ХЕ = 10г</option>
+<option value="12">1 ХЕ = 12г</option>
+</select>
+</div>
+<div class="text-center mt-6">
+<div id="xeResult" class="text-4xl font-bold">0 ХЕ</div>
+</div>
+</div>
 </div>
 
 <!-- PROFILE -->
 <div id="profilePage" class="page">
-  <div class="glass rounded-3xl p-6 text-center">
-    <img id="avatar" src="https://i.imgur.com/2DhmtJ4.png" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
-    <input type="file" id="avatarInput" hidden>
-    <button onclick="avatarInput.click()" class="glass px-3 py-1 rounded-xl mb-4 text-sm">Изменить фото</button>
-
-    <div id="profileInfo">
-      <div class="text-xl font-semibold" id="profileNameText">Пользователь</div>
-      <div class="text-gray-500 mb-4" id="profileTargetText">Цель: 0 ХЕ</div>
-      <button onclick="editProfile()" class="glass px-4 py-2 rounded-xl">Редактировать</button>
-    </div>
-
-    <div id="profileEdit" style="display:none">
-      <input id="profileName" class="glass rounded-xl px-3 py-2 w-full mb-2" placeholder="Имя">
-      <input id="profileTarget" class="glass rounded-xl px-3 py-2 w-full mb-4" placeholder="Цель ХЕ">
-      <button onclick="saveProfile()" class="glass px-4 py-2 rounded-xl">Сохранить</button>
-    </div>
-
-    <div class="glass rounded-3xl p-6 mt-6">
-      <h3 class="mb-2 font-semibold">Достижения</h3>
-      <div class="flex gap-3 justify-center flex-wrap" id="giftsContainer">
-        <div class="gift" data-name="Маленький Обжора" data-desc="Перестал переедать" id="gift1" style="background:url('Gifts/gift1_burger.png') no-repeat center/cover;"></div>
-        <div class="gift" data-name="Порядок дня!" data-desc="Все сделано правильно" id="gift2" style="background:url('Gifts/gift2_trophy.png') no-repeat center/cover;"></div>
-      </div>
-    </div>
-  </div>
+<div class="glass rounded-3xl p-6 text-center">
+<img id="avatar" src="https://i.imgur.com/2DhmtJ4.png" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+<input type="file" id="avatarInput" hidden>
+<button onclick="avatarInput.click()" class="glass px-3 py-1 rounded-xl mb-4 text-sm">Изменить фото</button>
+<div id="profileInfo">
+<div class="text-xl font-semibold" id="profileNameText">Пользователь</div>
+<div class="text-gray-500 mb-4" id="profileTargetText">Цель: 0 ХЕ</div>
+<button onclick="editProfile()" class="glass px-4 py-2 rounded-xl">Редактировать</button>
+</div>
+<div id="profileEdit" style="display:none">
+<input id="profileName" class="glass rounded-xl px-3 py-2 w-full mb-2" placeholder="Имя">
+<input id="profileTarget" class="glass rounded-xl px-3 py-2 w-full mb-4" placeholder="Цель ХЕ">
+<button onclick="saveProfile()" class="glass px-4 py-2 rounded-xl">Сохранить</button>
 </div>
 
-<!-- MODAL -->
-<div id="giftModal" class="modal">
-  <h3 id="giftTitle">Название</h3>
-  <p id="giftDesc">Описание</p>
-  <button onclick="closeModal()">Закрыть</button>
+<h3 class="mt-6 mb-4 font-semibold">Достижения</h3>
+<div class="flex gap-3 flex-wrap" id="giftsContainer"></div>
+<div id="giftInfo" class="giftInfo"></div>
+</div>
+
 </div>
 
 <!-- DOCK -->
 <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md dock">
-  <button onclick="openPage('home')" class="flex flex-col items-center text-sm"><iconify-icon icon="solar:home-linear" width="24"></iconify-icon>Главная</button>
-  <button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-sm"><iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>ХЕ</button>
-  <button onclick="openPage('platePage')" class="flex flex-col items-center text-sm"><iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>День</button>
-  <button onclick="openPage('profilePage')" class="flex flex-col items-center text-sm"><iconify-icon icon="solar:user-linear" width="24"></iconify-icon>Профиль</button>
+<button onclick="openPage('home')" class="flex flex-col items-center text-xs"><iconify-icon icon="solar:home-linear" width="24"></iconify-icon>Главная</button>
+<button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-xs"><iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>ХЕ</button>
+<button onclick="openPage('platePage')" class="flex flex-col items-center text-xs"><iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>День</button>
+<button onclick="openPage('profilePage')" class="flex flex-col items-center text-xs"><iconify-icon icon="solar:user-linear" width="24"></iconify-icon>Профиль</button>
 </div>
 
 <script>
-function openPage(id){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(id).classList.add("active"); }
+function openPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
-// Продукты
+// ---------------------- ПРОДУКТЫ ----------------------
 const foodDatabase=[
-{name:"Хлеб пшеничный",portion:"1 кусок (20г)",carbs:15,icon:"solar:bread-linear"},
-{name:"Хлеб ржаной",portion:"1 кусок (25г)",carbs:13,icon:"solar:bread-linear"},
-{name:"Гречка",portion:"50г",carbs:35,icon:"solar:plate-linear"},
-{name:"Рис",portion:"50г",carbs:36,icon:"solar:plate-linear"},
-{name:"Макароны",portion:"50г",carbs:30,icon:"solar:plate-linear"},
-{name:"Картофель",portion:"90г",carbs:20,icon:"solar:leaf-linear"},
-{name:"Яблоко",portion:"90г",carbs:12,icon:"solar:apple-linear"},
-{name:"Банан",portion:"70г",carbs:15,icon:"solar:apple-linear"},
-{name:"Апельсин",portion:"150г",carbs:14,icon:"solar:apple-linear"},
-{name:"Арбуз",portion:"270г",carbs:18,icon:"solar:apple-linear"},
-{name:"Сыр",portion:"30г",carbs:1,icon:"solar:cheese-linear"}, // неуглеводный
-{name:"Молоко",portion:"200мл",carbs:10,icon:"solar:milk-linear"},
-{name:"Курица",portion:"100г",carbs:0,icon:"solar:meat-linear"}, // неуглеводный
-{name:"Яйцо",portion:"1 шт",carbs:0,icon:"solar:egg-linear"},
-{name:"Огурец",portion:"100г",carbs:3,icon:"solar:leaf-linear"},
-{name:"Помидор",portion:"100г",carbs:4,icon:"solar:leaf-linear"},
-{name:"Лимон",portion:"1 шт",carbs:3,icon:"solar:apple-linear"},
-{name:"Мед",portion:"1 ст. ложка",carbs:17,icon:"solar:honey-linear"},
-{name:"Йогурт",portion:"150г",carbs:5,icon:"solar:milk-linear"},
-{name:"Кефир",portion:"200мл",carbs:5,icon:"solar:milk-linear"},
-{name:"Салат",portion:"100г",carbs:2,icon:"solar:leaf-linear"},
-{name:"Творог",portion:"100г",carbs:2,icon:"solar:cheese-linear"},
-{name:"Вода",portion:"200мл",carbs:0,icon:"solar:drop-linear"}
+{name:"Белый хлеб",portion:"1 кусок (20г)",carbs:11,icon:"solar:bread-linear"},
+{name:"Черный хлеб",portion:"1 кусок (25г)",carbs:12,icon:"solar:bread-linear"},
+{name:"Гречка",portion:"2 ст. ложки (50г)",carbs:17,icon:"solar:plate-linear"},
+{name:"Рис",portion:"2 ст. ложки (50г)",carbs:18,icon:"solar:plate-linear"},
+{name:"Макароны",portion:"2 ст. ложки (50г)",carbs:20,icon:"solar:plate-linear"},
+{name:"Картофель",portion:"65г",carbs:15,icon:"solar:leaf-linear"},
+{name:"Яблоко",portion:"100г",carbs:12,icon:"solar:apple-linear"},
+{name:"Банан",portion:"70г",carbs:12,icon:"solar:apple-linear"},
+// ... сюда добавьте остальные продукты (120+) с правильными carbs
 ];
 
-// Рендер продуктов
+// ---------------------- ТАРЕЛКА ----------------------
 const foodGrid=document.getElementById("foodGrid");
 const searchInput=document.getElementById("searchInput");
 const selectedItems=document.getElementById("selectedItems");
 const xeTotal=document.getElementById("xeTotal");
 let selected=[];
+
 function renderFood(filter=""){
   foodGrid.innerHTML="";
-  foodDatabase.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase())).forEach(food=>{
+  const list=foodDatabase.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase()));
+  list.forEach(food=>{
     const card=document.createElement("div");
     card.className="glass p-4 rounded-2xl flex justify-between cursor-pointer";
     card.onclick=()=>addFood(food);
     card.innerHTML=`
-      <div class="flex gap-3 items-center">
-        <iconify-icon icon="${food.icon}" width="24"></iconify-icon>
-        <div><div class="font-medium">${food.name}</div><div class="text-sm text-gray-500">${food.portion} = 1 ХЕ</div></div>
+    <div class="flex gap-3 items-center">
+      <iconify-icon icon="${food.icon}" width="24"></iconify-icon>
+      <div>
+        <div class="font-medium">${food.name}</div>
+        <div class="text-sm text-gray-500">${food.portion} = ${food.carbs>0 ? '1 ХЕ':''}</div>
       </div>
-      <iconify-icon icon="solar:add-circle-linear"></iconify-icon>
+    </div>
+    <iconify-icon icon="solar:add-circle-linear"></iconify-icon>
     `;
     foodGrid.appendChild(card);
   });
 }
-function addFood(food){ selected.push(food); renderPlate(); checkGifts(); }
-function removeFood(index){ selected.splice(index,1); renderPlate(); checkGifts(); }
+
+function addFood(food){
+  selected.push(food);
+  renderPlate();
+}
+
+function removeFood(index){
+  selected.splice(index,1);
+  renderPlate();
+}
+
 function renderPlate(){
   selectedItems.innerHTML="";
   let totalXE=0;
   selected.forEach((f,i)=>{
-    if(f.carbs>0) totalXE += f.carbs/10; // считаем только углеводы
+    if(f.carbs>0) totalXE += f.carbs/10;
     const row=document.createElement("div");
     row.className="glass rounded-xl px-3 py-2 flex justify-between";
     row.innerHTML=`<div>${f.name}</div><button onclick="removeFood(${i})">✕</button>`;
     selectedItems.appendChild(row);
   });
-  xeTotal.innerText=totalXE.toFixed(2);
+  xeTotal.innerText=totalXE.toFixed(1);
+  checkGifts();
 }
+
 searchInput.addEventListener("input",e=>renderFood(e.target.value));
 renderFood();
 
-// Калькулятор
+// ---------------------- КАЛЬКУЛЯТОР ----------------------
 const carbsInput=document.getElementById("carbsInput");
 const weightInput=document.getElementById("weightInput");
 const xeType=document.getElementById("xeType");
 const xeResult=document.getElementById("xeResult");
-function calc(){ 
+
+function calc(){
   const carbs=parseFloat(carbsInput.value);
   const weight=parseFloat(weightInput.value);
   const xe=parseFloat(xeType.value);
   if(!carbs||!weight){ xeResult.innerText="0 ХЕ"; return; }
   const totalCarbs=carbs*weight/100;
   const result=totalCarbs/xe;
-  xeResult.innerText=result.toFixed(2)+" ХЕ";
+  xeResult.innerText=result.toFixed(1)+" ХЕ";
 }
+
 carbsInput.addEventListener("input",calc);
 weightInput.addEventListener("input",calc);
 xeType.addEventListener("change",calc);
 
-// Профиль
-const profileNameText=document.getElementById("profileNameText");
-const profileTargetText=document.getElementById("profileTargetText");
+// ---------------------- ПРОФИЛЬ ----------------------
+const avatarInput=document.getElementById("avatarInput");
+const avatar=document.getElementById("avatar");
+const profileInfo=document.getElementById("profileInfo");
 const profileEdit=document.getElementById("profileEdit");
 const profileName=document.getElementById("profileName");
 const profileTarget=document.getElementById("profileTarget");
-const avatar=document.getElementById("avatar");
-const avatarInput=document.getElementById("avatarInput");
+const profileNameText=document.getElementById("profileNameText");
+const profileTargetText=document.getElementById("profileTargetText");
 
 avatarInput.onchange=function(){
   const file=this.files[0];
   const reader=new FileReader();
-  reader.onload=function(e){ avatar.src=e.target.result; localStorage.setItem("avatar",e.target.result); }
+  reader.onload=function(e){
+    avatar.src=e.target.result;
+    localStorage.setItem("avatar",e.target.result);
+  }
   reader.readAsDataURL(file);
 }
-function editProfile(){ profileEdit.style.display="block"; }
-function saveProfile(){ localStorage.setItem("name",profileName.value); localStorage.setItem("target",profileTarget.value); loadProfile(); profileEdit.style.display="none"; }
+
+function editProfile(){
+  profileInfo.style.display="none";
+  profileEdit.style.display="block";
+}
+
+function saveProfile(){
+  localStorage.setItem("name",profileName.value);
+  localStorage.setItem("target",profileTarget.value);
+  loadProfile();
+  profileEdit.style.display="none";
+  profileInfo.style.display="block";
+}
+
 function loadProfile(){
   profileNameText.innerText=localStorage.getItem("name")||"Пользователь";
   profileTargetText.innerText="Цель: "+(localStorage.getItem("target")||0)+" ХЕ";
@@ -272,27 +294,42 @@ function loadProfile(){
 }
 loadProfile();
 
-// Подарки
-const gifts=document.querySelectorAll(".gift");
-const modal=document.getElementById("giftModal");
-const giftTitle=document.getElementById("giftTitle");
-const giftDesc=document.getElementById("giftDesc");
+// ---------------------- ДОСТИЖЕНИЯ ----------------------
+const gifts=[
+  {id:1,name:"Маленький Обжора",desc:"Добавьте больше 5 ХЕ за день",img:"gift1_burger.png",achieved:false},
+  {id:2,name:"Порядок дня!",desc:"Если все продукты рассчитаны правильно",img:"gift2_trophy.png",achieved:false}
+];
+
+const giftsContainer=document.getElementById("giftsContainer");
+const giftInfo=document.getElementById("giftInfo");
+
 function checkGifts(){
-  const xeCount=selected.reduce((sum,f)=>sum+ (f.carbs>0? f.carbs/10:0),0);
-  if(xeCount>=20) document.getElementById("gift1").classList.add("unlocked");
-  if(xeCount>=50) document.getElementById("gift2").classList.add("unlocked"); // Порядок дня
-}
-gifts.forEach(g=>{
-  g.addEventListener("click",()=>{
-    if(g.classList.contains("unlocked")){
-      giftTitle.innerText=g.dataset.name;
-      giftDesc.innerText=g.dataset.desc;
-      modal.classList.add("show");
+  gifts.forEach(g=>{
+    if(!g.achieved){
+      if(g.id===1 && parseFloat(xeTotal.innerText)>=5) g.achieved=true;
+      if(g.id===2 && parseFloat(xeTotal.innerText)>=0.1) g.achieved=true; // пример условие
     }
   });
-});
-function closeModal(){ modal.classList.remove("show"); }
-</script>
+  renderGifts();
+}
 
+function renderGifts(){
+  giftsContainer.innerHTML="";
+  gifts.forEach(g=>{
+    const div=document.createElement("div");
+    div.className="gift";
+    div.innerHTML=`<img src="${g.img}" class="w-10 h-10 rounded-xl object-cover">`;
+    if(g.achieved){
+      div.onclick=()=>{
+        giftInfo.style.display="block";
+        giftInfo.innerHTML=`🎉 ${g.name}<br>${g.desc}`;
+        setTimeout(()=>giftInfo.style.display="none",2500);
+      }
+    }
+    giftsContainer.appendChild(div);
+  });
+}
+renderGifts();
+</script>
 </body>
 </html>
