@@ -27,18 +27,24 @@ box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
 .dock{
-background:rgba(255,255,255,0.5);
-backdrop-filter:blur(30px);
-border:1px solid rgba(255,255,255,0.6);
+background:rgba(255,255,255,0.55);
+backdrop-filter: blur(30px);
+border:1px solid rgba(255,255,255,0.7);
+}
+
+.page{
+display:none;
+}
+
+.page.active{
+display:block;
 }
 
 </style>
 
 </head>
 
-
 <body class="text-gray-900 min-h-screen pb-32">
-
 
 <div class="max-w-5xl mx-auto px-4 py-8">
 
@@ -47,7 +53,7 @@ border:1px solid rgba(255,255,255,0.6);
 <div class="flex items-center gap-3">
 
 <div class="w-10 h-10 glass rounded-xl flex items-center justify-center">
-<iconify-icon icon="solar:health-linear" width="24"></iconify-icon>
+<iconify-icon icon="solar:health-linear"></iconify-icon>
 </div>
 
 <div class="text-2xl font-semibold">
@@ -63,16 +69,22 @@ Healthier
 </header>
 
 
+<!-- ГЛАВНАЯ -->
+<div id="home" class="page active">
+
 <input id="searchInput"
 class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none"
 placeholder="Найти продукт...">
 
+<div id="foodGrid" class="grid md:grid-cols-2 gap-3"></div>
 
-<div id="foodGrid" class="grid md:grid-cols-2 gap-3 mb-10"></div>
+</div>
 
 
+<!-- ТАРЕЛКА -->
+<div id="platePage" class="page">
 
-<div class="glass rounded-3xl p-6 mb-8">
+<div class="glass rounded-3xl p-6">
 
 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
 
@@ -92,7 +104,11 @@ placeholder="Найти продукт...">
 
 </div>
 
+</div>
 
+
+<!-- КАЛЬКУЛЯТОР -->
+<div id="calculatorPage" class="page">
 
 <div class="glass rounded-3xl p-6">
 
@@ -136,40 +152,56 @@ placeholder="Вес (г)">
 </div>
 
 
+<!-- ПРОФИЛЬ -->
+<div id="profilePage" class="page">
 
+<div class="glass rounded-3xl p-6 text-center">
+
+<iconify-icon icon="solar:user-circle-linear" width="60"></iconify-icon>
+
+<div class="mt-4 text-xl font-semibold">
+Профиль
+</div>
+
+<div class="text-gray-500">
+Healthier пользователь
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- DOCK -->
 <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md dock rounded-3xl px-6 py-3 flex justify-between items-center">
 
-<button class="flex flex-col items-center text-sm">
+<button onclick="openPage('home')" class="flex flex-col items-center text-sm">
 
 <iconify-icon icon="solar:home-linear" width="24"></iconify-icon>
-
 Главная
 
 </button>
 
-
-<button class="flex flex-col items-center text-sm">
+<button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-sm">
 
 <iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>
-
 ХЕ
 
 </button>
 
+<button onclick="openPage('platePage')" class="flex flex-col items-center text-sm">
 
-<button class="flex flex-col items-center text-sm">
-
-<iconify-icon icon="solar:chart-linear" width="24"></iconify-icon>
-
+<iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>
 День
 
 </button>
 
-
-<button class="flex flex-col items-center text-sm">
+<button onclick="openPage('profilePage')" class="flex flex-col items-center text-sm">
 
 <iconify-icon icon="solar:user-linear" width="24"></iconify-icon>
-
 Профиль
 
 </button>
@@ -180,24 +212,33 @@ placeholder="Вес (г)">
 
 <script>
 
-const foodDatabase = [
+function openPage(id){
 
-{ id:1,name:"Хлеб пшеничный",portion:"1 кусок (20г)",icon:"solar:bread-linear"},
-{ id:2,name:"Хлеб ржаной",portion:"1 кусок (25г)",icon:"solar:bread-linear"},
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active")
+})
 
-{ id:3,name:"Гречка",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{ id:4,name:"Рис",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{ id:5,name:"Макароны",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+document.getElementById(id).classList.add("active")
 
-{ id:6,name:"Картофель вареный",portion:"1 средний (90г)",icon:"solar:leaf-linear"},
+}
 
-{ id:7,name:"Яблоко",portion:"1 среднее (90г)",icon:"solar:apple-linear"},
-{ id:8,name:"Апельсин",portion:"150г",icon:"solar:apple-linear"},
-{ id:9,name:"Банан",portion:"70г",icon:"solar:apple-linear"},
 
-{ id:10,name:"Арбуз",portion:"270г",icon:"solar:apple-linear"}
+
+const foodDatabase=[
+
+{name:"Хлеб пшеничный",portion:"1 кусок (20г)",icon:"solar:bread-linear"},
+{name:"Хлеб ржаной",portion:"1 кусок (25г)",icon:"solar:bread-linear"},
+{name:"Гречка",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+{name:"Рис",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+{name:"Макароны",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+{name:"Картофель",portion:"1 средний (90г)",icon:"solar:leaf-linear"},
+{name:"Яблоко",portion:"1 среднее (90г)",icon:"solar:apple-linear"},
+{name:"Апельсин",portion:"150г",icon:"solar:apple-linear"},
+{name:"Банан",portion:"70г",icon:"solar:apple-linear"},
+{name:"Арбуз",portion:"270г",icon:"solar:apple-linear"}
 
 ];
+
 
 const foodGrid=document.getElementById("foodGrid");
 const searchInput=document.getElementById("searchInput");
@@ -206,6 +247,7 @@ const selectedItems=document.getElementById("selectedItems");
 const xeTotal=document.getElementById("xeTotal");
 
 let selected=[];
+
 
 
 function renderFood(filter=""){
@@ -233,8 +275,7 @@ card.innerHTML=`
 <div>
 
 <div class="font-medium">${food.name}</div>
-
-<div class="text-sm text-gray-500">${food.portion}</div>
+<div class="text-sm text-gray-500">${food.portion} = 1 ХЕ</div>
 
 </div>
 
@@ -251,21 +292,24 @@ foodGrid.appendChild(card);
 }
 
 
+
 function addFood(food){
 
 selected.push(food);
-
 renderPlate();
 
 }
+
+
 
 function removeFood(index){
 
 selected.splice(index,1);
-
 renderPlate();
 
 }
+
+
 
 function renderPlate(){
 
@@ -275,7 +319,7 @@ selected.forEach((food,i)=>{
 
 const row=document.createElement("div");
 
-row.className="flex justify-between glass rounded-xl px-3 py-2";
+row.className="glass rounded-xl px-3 py-2 flex justify-between";
 
 row.innerHTML=`
 
@@ -293,11 +337,14 @@ xeTotal.innerText=selected.length;
 
 }
 
+
+
 searchInput.addEventListener("input",e=>{
 renderFood(e.target.value)
-});
+})
 
-renderFood();
+renderFood()
+
 
 
 const carbsInput=document.getElementById("carbsInput");
