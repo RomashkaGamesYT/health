@@ -16,55 +16,25 @@
 
 body{
 font-family:'Unbounded',sans-serif;
-background:
-radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
-radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
-#f6f7fb;
+background:#f6f7fb;
 }
 
 .glass{
-background:rgba(255,255,255,0.55);
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,0.6);
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:.3s;
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.8);
+box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
-.dock{
-background:rgba(255,255,255,0.55);
-backdrop-filter:blur(30px);
-border:1px solid rgba(255,255,255,0.7);
-}
-
-.page{
-display:none;
-opacity:0;
-transform:translateY(20px);
-transition:.4s;
-}
-
-.page.active{
-display:block;
-opacity:1;
-transform:translateY(0);
-}
-
-.addAnim{
-animation:add .4s;
-}
-
-@keyframes add{
-0%{transform:scale(.8)}
-70%{transform:scale(1.05)}
-100%{transform:scale(1)}
-}
+.page{display:none}
+.page.active{display:block}
 
 .unlock{
-animation:unlock .6s;
+animation:unlock .5s;
 }
 
 @keyframes unlock{
-0%{transform:scale(.5);opacity:0}
+0%{transform:scale(.6);opacity:0}
 100%{transform:scale(1);opacity:1}
 }
 
@@ -72,16 +42,16 @@ animation:unlock .6s;
 
 </head>
 
-<body class="min-h-screen text-gray-900 pb-32">
+<body class="min-h-screen pb-32">
 
 <div class="max-w-5xl mx-auto px-4 py-8">
 
 <header class="flex justify-between mb-8">
 
-<div class="flex items-center gap-3">
+<div class="flex gap-3 items-center">
 
 <div class="glass w-10 h-10 rounded-xl flex items-center justify-center">
-<iconify-icon icon="solar:health-linear"></iconify-icon>
+❤️
 </div>
 
 <div class="text-2xl font-semibold">
@@ -90,19 +60,15 @@ Healthier
 
 </div>
 
-<div class="glass px-4 py-2 rounded-full text-sm">
-1 ХЕ ≈ 10-12 г
-</div>
-
 </header>
 
 <!-- HOME -->
 
 <div id="home" class="page active">
 
-<input id="searchInput"
-class="glass w-full rounded-2xl px-5 py-4 mb-6"
-placeholder="Найти продукт...">
+<input id="search"
+class="glass w-full px-4 py-3 rounded-xl mb-6"
+placeholder="Поиск продукта">
 
 <div id="foodGrid" class="grid md:grid-cols-2 gap-3"></div>
 
@@ -110,18 +76,17 @@ placeholder="Найти продукт...">
 
 <!-- PLATE -->
 
-<div id="platePage" class="page">
+<div id="plate" class="page">
 
-<div class="glass rounded-3xl p-6">
+<div class="glass p-6 rounded-2xl">
 
-<h2 class="mb-4 flex gap-2 items-center">
-<iconify-icon icon="solar:plate-linear"></iconify-icon>
-Моя тарелка
+<h2 class="mb-4 font-semibold">
+🍽 Тарелка
 </h2>
 
-<div id="selectedItems" class="space-y-2 mb-4"></div>
+<div id="plateList" class="space-y-2"></div>
 
-<div class="font-semibold">
+<div class="mt-4">
 Всего: <span id="xeTotal">0</span> ХЕ
 </div>
 
@@ -129,38 +94,76 @@ placeholder="Найти продукт...">
 
 </div>
 
-<!-- SUGAR GRAPH -->
+<!-- CALCULATOR -->
 
-<div id="sugarPage" class="page">
+<div id="calc" class="page">
 
-<div class="glass rounded-3xl p-6">
+<div class="glass p-6 rounded-2xl">
 
-<h2 class="mb-4 flex gap-2 items-center">
-<iconify-icon icon="solar:chart-linear"></iconify-icon>
-График сахара
+<h2 class="mb-4 font-semibold">
+🧮 Калькулятор ХЕ
 </h2>
 
-<div class="grid md:grid-cols-3 gap-2 mb-4">
+<input id="carbs"
+class="glass w-full px-3 py-2 rounded-xl mb-2"
+placeholder="углеводы на 100г">
 
-<input id="sugarTime" type="time"
-class="glass rounded-xl px-3 py-2">
+<input id="weight"
+class="glass w-full px-3 py-2 rounded-xl mb-2"
+placeholder="вес (г или мл)">
 
-<input id="sugarValue" type="number"
-class="glass rounded-xl px-3 py-2"
-placeholder="сахар">
+<select id="xeType"
+class="glass w-full px-3 py-2 rounded-xl mb-3">
 
-<input id="sugarText"
-class="glass rounded-xl px-3 py-2"
-placeholder="комментарий">
+<option value="10">1 ХЕ = 10г</option>
+<option value="12">1 ХЕ = 12г</option>
+
+</select>
+
+<button onclick="calcXE()"
+class="glass px-4 py-2 rounded-xl">
+
+Посчитать
+
+</button>
+
+<div id="xeResult" class="mt-4 text-xl font-semibold">
+0 ХЕ
+</div>
 
 </div>
 
+</div>
+
+<!-- SUGAR -->
+
+<div id="sugar" class="page">
+
+<div class="glass p-6 rounded-2xl">
+
+<h2 class="mb-4 font-semibold">
+📊 График сахара
+</h2>
+
+<input type="time" id="sTime"
+class="glass w-full px-3 py-2 rounded-xl mb-2">
+
+<input id="sValue"
+class="glass w-full px-3 py-2 rounded-xl mb-2"
+placeholder="уровень сахара">
+
+<input id="sText"
+class="glass w-full px-3 py-2 rounded-xl mb-3"
+placeholder="комментарий">
+
 <button onclick="addSugar()"
-class="glass px-4 py-2 rounded-xl mb-4">
+class="glass px-4 py-2 rounded-xl">
+
 Добавить
+
 </button>
 
-<div id="sugarList" class="space-y-2"></div>
+<div id="sugarList" class="mt-4 space-y-2"></div>
 
 </div>
 
@@ -168,42 +171,43 @@ class="glass px-4 py-2 rounded-xl mb-4">
 
 <!-- PROFILE -->
 
-<div id="profilePage" class="page">
+<div id="profile" class="page">
 
-<div class="glass rounded-3xl p-6 text-center">
+<div class="glass p-6 rounded-2xl text-center">
 
 <img id="avatar"
 src="https://i.imgur.com/2DhmtJ4.png"
 class="w-24 h-24 rounded-full mx-auto mb-4">
 
-<input type="file" id="avatarInput" hidden>
+<input type="file" id="avatarUpload">
 
-<button onclick="avatarInput.click()"
-class="glass px-3 py-1 rounded-xl mb-4">
-Изменить фото
+<input id="name"
+class="glass w-full px-3 py-2 rounded-xl mb-2"
+placeholder="Имя">
+
+<input id="goal"
+class="glass w-full px-3 py-2 rounded-xl mb-3"
+placeholder="Цель ХЕ">
+
+<button onclick="saveProfile()"
+class="glass px-4 py-2 rounded-xl">
+
+Сохранить
+
 </button>
 
-<div class="text-xl font-semibold" id="profileNameText">
-Пользователь
 </div>
 
-</div>
+<div class="glass p-6 rounded-2xl mt-6">
 
-<div class="glass rounded-3xl p-6 mt-6">
-
-<h3 class="mb-3 font-semibold">
-Достижения
+<h3 class="font-semibold mb-3">
+🏆 Достижения
 </h3>
 
-<div class="flex gap-3">
+<div id="achievements" class="space-y-2">
 
-<div id="achFood" class="glass px-3 py-2 rounded-xl">
-Маленький Обжора
-</div>
-
-<div id="achSugar" class="glass px-3 py-2 rounded-xl">
-Сахарный график
-</div>
+<div id="achEat">🍔 Маленький Обжора</div>
+<div id="achSugar">📈 Сахарный график</div>
 
 </div>
 
@@ -215,23 +219,13 @@ class="glass px-3 py-1 rounded-xl mb-4">
 
 <!-- DOCK -->
 
-<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md dock rounded-3xl px-6 py-3 flex justify-between">
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-3xl shadow flex gap-6">
 
-<button onclick="openPage('home')">
-<iconify-icon icon="solar:home-linear" width="24"></iconify-icon>
-</button>
-
-<button onclick="openPage('platePage')">
-<iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>
-</button>
-
-<button onclick="openPage('sugarPage')">
-<iconify-icon icon="solar:chart-linear" width="24"></iconify-icon>
-</button>
-
-<button onclick="openPage('profilePage')">
-<iconify-icon icon="solar:user-linear" width="24"></iconify-icon>
-</button>
+<button onclick="openPage('home')">🏠</button>
+<button onclick="openPage('plate')">🍽</button>
+<button onclick="openPage('calc')">🧮</button>
+<button onclick="openPage('sugar')">📊</button>
+<button onclick="openPage('profile')">👤</button>
 
 </div>
 
@@ -240,37 +234,38 @@ class="glass px-3 py-1 rounded-xl mb-4">
 function openPage(id){
 
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+
 document.getElementById(id).classList.add("active")
 
 }
 
 const foods=[
-{name:"Хлеб"},
-{name:"Гречка"},
-{name:"Рис"},
-{name:"Картофель"},
-{name:"Яблоко"},
-{name:"Банан"}
+{name:"Яблоко",xe:"90г = 1 ХЕ",carbs:11},
+{name:"Банан",xe:"70г = 1 ХЕ",carbs:23},
+{name:"Хлеб",xe:"20г = 1 ХЕ",carbs:48},
+{name:"Рис",xe:"50г = 1 ХЕ",carbs:77}
 ]
 
-const foodGrid=document.getElementById("foodGrid")
-const selectedItems=document.getElementById("selectedItems")
+let plate=[]
 
-let selected=[]
+function renderFoods(){
 
-function renderFood(){
+foodGrid.innerHTML=""
 
-foods.forEach(food=>{
+foods.forEach(f=>{
 
 const card=document.createElement("div")
 
-card.className="glass p-4 rounded-2xl flex justify-between cursor-pointer"
-
-card.onclick=()=>addFood(food)
+card.className="glass p-4 rounded-xl flex justify-between"
 
 card.innerHTML=`
-<div>${food.name}</div>
-<iconify-icon icon="solar:add-circle-linear"></iconify-icon>
+<div>
+<div>${f.name}</div>
+<div class="text-sm">${f.xe}</div>
+<div class="text-xs text-gray-500">${f.carbs}г углеводов</div>
+</div>
+
+<button onclick="addFood('${f.name}')">➕</button>
 `
 
 foodGrid.appendChild(card)
@@ -279,71 +274,78 @@ foodGrid.appendChild(card)
 
 }
 
-renderFood()
+renderFoods()
 
-function addFood(food){
+function addFood(name){
 
-selected.push(food)
+plate.push(name)
 
-renderPlate()
+if(plate.length>=10){
 
-if(selected.length>=10){
-
-unlock("achFood")
+unlock("achEat")
 
 }
+
+renderPlate()
 
 }
 
 function renderPlate(){
 
-selectedItems.innerHTML=""
+plateList.innerHTML=""
 
-selected.forEach((f,i)=>{
+plate.forEach((p,i)=>{
 
-const row=document.createElement("div")
-
-row.className="glass rounded-xl px-3 py-2 flex justify-between addAnim"
-
-row.innerHTML=`
-<div>${f.name}</div>
-<button onclick="removeFood(${i})">✕</button>
+plateList.innerHTML+=`
+<div class="glass px-3 py-2 rounded-xl flex justify-between">
+${p}
+<button onclick="removeFood(${i})">❌</button>
+</div>
 `
-
-selectedItems.appendChild(row)
 
 })
 
-xeTotal.innerText=selected.length
+xeTotal.innerText=plate.length
 
 }
 
 function removeFood(i){
 
-selected.splice(i,1)
+plate.splice(i,1)
+
 renderPlate()
 
 }
 
-let sugars=[]
+function calcXE(){
+
+const carbs=document.getElementById("carbs").value
+const weight=document.getElementById("weight").value
+const xe=document.getElementById("xeType").value
+
+const total=(carbs*weight/100)/xe
+
+xeResult.innerText=total.toFixed(2)+" ХЕ"
+
+}
+
+let sugar=[]
 
 function addSugar(){
 
-const time=sugarTime.value
-const val=sugarValue.value
-const text=sugarText.value
+const t=sTime.value
+const v=sValue.value
+const txt=sText.value
 
-const obj={time,val,text}
+sugar.push({t,v,txt})
 
-sugars.push(obj)
-
-renderSugar()
-
-if(sugars.length>=5){
+if(sugar.length>=5){
 
 unlock("achSugar")
 
 }
+
+renderSugar()
 
 }
 
@@ -351,15 +353,13 @@ function renderSugar(){
 
 sugarList.innerHTML=""
 
-sugars.forEach(s=>{
+sugar.forEach(s=>{
 
-const row=document.createElement("div")
-
-row.className="glass px-3 py-2 rounded-xl"
-
-row.innerText=s.time+" — "+s.val+" — "+s.text
-
-sugarList.appendChild(row)
+sugarList.innerHTML+=`
+<div class="glass px-3 py-2 rounded-xl">
+${s.t} — ${s.v} — ${s.txt}
+</div>
+`
 
 })
 
@@ -367,13 +367,18 @@ sugarList.appendChild(row)
 
 function unlock(id){
 
-const el=document.getElementById(id)
+document.getElementById(id).classList.add("unlock")
 
-el.classList.add("unlock")
+}
+
+function saveProfile(){
+
+localStorage.setItem("name",name.value)
+localStorage.setItem("goal",goal.value)
 
 }
 
 </script>
 
 </body>
-</html>
+  </html>
