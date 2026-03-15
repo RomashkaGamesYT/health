@@ -15,7 +15,7 @@ body{
               #f6f7fb;
   margin:0;
   min-height:100vh;
-  padding-bottom:100px;
+  padding-bottom:120px;
 }
 .glass{
   background:rgba(255,255,255,0.55);
@@ -47,6 +47,11 @@ body{
   justify-content:space-between;
   align-items:center;
   margin-bottom:8px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+}
+.card:hover{
+  transform:scale(1.02);
 }
 input, select, button{
   font-family:'Unbounded',sans-serif;
@@ -80,6 +85,7 @@ button{
   justify-content:space-around;
   padding:10px 0;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  transition:all 0.3s ease;
 }
 .dock button{
   display:flex;
@@ -99,6 +105,33 @@ button{
   justify-content:center;
   font-size:28px;
   margin-right:8px;
+  opacity:0.4;
+  transition:all 0.3s ease;
+}
+.gift.active{
+  opacity:1;
+}
+.modal{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:24px;
+  width:80%;
+  max-width:300px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  transition:all 0.3s ease;
+  z-index:999;
+}
+.modal.show{
+  transform:translate(-50%,-50%) scale(1);
+}
+.modal button{
+  margin-top:16px;
 }
 </style>
 </head>
@@ -177,10 +210,8 @@ button{
 
   <div class="glass rounded-3xl p-6 mt-6">
     <h3 class="mb-4 font-semibold">Подарки / достижения</h3>
-    <div class="flex gap-3">
-      <div class="gift">🍔</div>
-      <div class="gift">📈</div>
-      <div class="gift">🏅</div>
+    <div id="giftsContainer" class="flex gap-3">
+      <!-- подарки создаются через JS -->
     </div>
   </div>
 </div>
@@ -193,6 +224,13 @@ button{
   <button onclick="openPage('calculatorPage')"><iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>ХЕ</button>
   <button onclick="openPage('platePage')"><iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>День</button>
   <button onclick="openPage('profilePage')"><iconify-icon icon="solar:user-linear" width="24"></iconify-icon>Профиль</button>
+</div>
+
+<!-- MODAL -->
+<div id="giftModal" class="modal">
+  <div id="giftTitle" class="text-lg font-semibold mb-2"></div>
+  <div id="giftDesc" class="text-sm text-gray-600"></div>
+  <button onclick="closeGiftModal()">Закрыть</button>
 </div>
 
 <script>
@@ -221,10 +259,10 @@ function renderFood(filter=""){
   foodGrid.innerHTML=""
   foods.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase())).forEach(food=>{
     const card=document.createElement("div")
-    card.className="card cursor-pointer"
+    card.className="card"
     card.innerHTML=`<div>${food.name}<br><span class="text-sm text-gray-500">${food.portion} = 1 ХЕ</span></div>
                     <button>Добавить</button>`
-    card.querySelector("button").onclick=()=>{selected.push(food); renderPlate();}
+    card.querySelector("button").onclick=()=>{selected.push(food); renderPlate(); checkAchievements();}
     foodGrid.appendChild(card)
   })
 }
@@ -234,7 +272,7 @@ function renderPlate(){
   selected.forEach((f,i)=>{
     const row=document.createElement("div")
     row.className="card"
-    row.innerHTML=`<span>${f.name}</span><button onclick="selected.splice(${i},1); renderPlate();">✕</button>`
+    row.innerHTML=`<span>${f.name}</span><button onclick="selected.splice(${i},1); renderPlate(); checkAchievements();">✕</button>`
     selectedItems.appendChild(row)
   })
   xeTotal.innerText=selected.length
@@ -300,6 +338,41 @@ function loadProfile(){
   if(localStorage.getItem("avatar")) avatar.src=localStorage.getItem("avatar")
 }
 loadProfile()
+
+// ---- подарки/достижения ----
+const gifts=[
+  {emoji:"🍔", title:"Маленький Обжора", desc:"Перестать есть больше нормы", condition:()=>selected.length>=5, unlocked:false},
+  {emoji:"📈", title:"Сахарный график", desc:"Заполнить полностью тарелку продуктов", condition:()=>selected.length>=3, unlocked:false},
+  {emoji:"🏅", title:"Проба", desc:"Начало работы с приложением", condition:()=>true, unlocked:true}
+]
+const giftsContainer=document.getElementById("giftsContainer")
+
+function renderGifts(){
+  giftsContainer.innerHTML=""
+  gifts.forEach((gift,i)=>{
+    const g=document.createElement("div")
+    g.className="gift "+(gift.unlocked?"active":"")
+    g.innerText=gift.emoji
+    g.onclick=()=>{
+      if(!gift.unlocked) return
+      document.getElementById("giftTitle").innerText=gift.title
+      document.getElementById("giftDesc").innerText=gift.desc
+      document.getElementById("giftModal").classList.add("show")
+    }
+    giftsContainer.appendChild(g)
+  })
+}
+
+function closeGiftModal(){
+  document.getElementById("giftModal").classList.remove("show")
+}
+
+function checkAchievements(){
+  gifts.forEach(g=>{
+    if(!g.unlocked && g.condition()){ g.unlocked=true; renderGifts(); }
+  })
+}
+renderGifts()
 </script>
 </body>
 </html>
