@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Healthier</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -61,8 +60,6 @@ body{
 .modal h3{ font-size: 1.25rem; font-weight: 600; margin-bottom: .5rem; }
 .modal p{ color: #555; }
 .modal button{ margin-top: 1rem; background:#4f46e5; color:#fff; padding:.5rem 1rem; border-radius:.75rem; cursor:pointer; }
-
-/* Адаптивный интерфейс для ПК */
 @media(min-width:1024px){
   #foodGrid{ grid-template-columns: repeat(4, 1fr); }
   .dock{ max-width:800px; }
@@ -93,11 +90,10 @@ body{
 <div id="platePage" class="page">
   <div class="glass rounded-3xl p-6">
     <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-      <iconify-icon icon="solar:plate-linear"></iconify-icon>
-      Моя тарелка
+      <iconify-icon icon="solar:plate-linear"></iconify-icon>Моя тарелка
     </h2>
     <div id="selectedItems" class="space-y-2 mb-4"></div>
-    <div class="text-lg font-semibold">Всего: <span id="xeTotal">0</span> ХЕ</div>
+    <div class="text-lg font-semibold">Всего ХЕ: <span id="xeTotal">0</span></div>
   </div>
 </div>
 
@@ -105,8 +101,7 @@ body{
 <div id="calculatorPage" class="page">
   <div class="glass rounded-3xl p-6">
     <h2 class="text-lg font-semibold mb-6 flex items-center gap-2">
-      <iconify-icon icon="solar:calculator-linear"></iconify-icon>
-      Калькулятор ХЕ
+      <iconify-icon icon="solar:calculator-linear"></iconify-icon>Калькулятор ХЕ
     </h2>
     <div class="grid md:grid-cols-3 gap-4">
       <input id="carbsInput" type="number" class="glass rounded-xl px-4 py-3" placeholder="Углеводы на 100г">
@@ -143,7 +138,7 @@ body{
       <h3 class="mb-2 font-semibold">Достижения</h3>
       <div class="flex gap-3 justify-center flex-wrap" id="giftsContainer">
         <div class="gift" data-name="Маленький Обжора" data-desc="Перестал переедать" id="gift1" style="background:url('Gifts/gift1_burger.png') no-repeat center/cover;"></div>
-        <div class="gift" data-name="Сахарный график" data-desc="Заполнил полностью график сахара" id="gift2" style="background:url('Gifts/gift2_cup.png') no-repeat center/cover;"></div>
+        <div class="gift" data-name="Порядок дня!" data-desc="Все сделано правильно" id="gift2" style="background:url('Gifts/gift2_trophy.png') no-repeat center/cover;"></div>
       </div>
     </div>
   </div>
@@ -165,35 +160,34 @@ body{
 </div>
 
 <script>
-// Переход страниц
 function openPage(id){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(id).classList.add("active"); }
 
 // Продукты
 const foodDatabase=[
-// Добавь более 120 продуктов сюда с iconify
-{name:"Хлеб пшеничный",portion:"1 кусок (20г)",icon:"solar:bread-linear"},
-{name:"Хлеб ржаной",portion:"1 кусок (25г)",icon:"solar:bread-linear"},
-{name:"Гречка",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{name:"Рис",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{name:"Макароны",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{name:"Картофель",portion:"1 средний (90г)",icon:"solar:leaf-linear"},
-{name:"Яблоко",portion:"1 среднее (90г)",icon:"solar:apple-linear"},
-{name:"Апельсин",portion:"150г",icon:"solar:apple-linear"},
-{name:"Банан",portion:"70г",icon:"solar:apple-linear"},
-{name:"Арбуз",portion:"270г",icon:"solar:apple-linear"},
-{name:"Сыр",portion:"30г",icon:"solar:cheese-linear"},
-{name:"Молоко",portion:"200мл",icon:"solar:milk-linear"},
-{name:"Курица",portion:"100г",icon:"solar:meat-linear"},
-{name:"Яйцо",portion:"1 шт",icon:"solar:egg-linear"},
-{name:"Огурец",portion:"100г",icon:"solar:leaf-linear"},
-{name:"Помидор",portion:"100г",icon:"solar:leaf-linear"},
-{name:"Лимон",portion:"1 шт",icon:"solar:apple-linear"},
-{name:"Мед",portion:"1 ст. ложка",icon:"solar:honey-linear"},
-{name:"Йогурт",portion:"150г",icon:"solar:milk-linear"},
-{name:"Кефир",portion:"200мл",icon:"solar:milk-linear"},
-{name:"Салат",portion:"100г",icon:"solar:leaf-linear"},
-{name:"Творог",portion:"100г",icon:"solar:cheese-linear"},
-{name:"Вода",portion:"200мл",icon:"solar:drop-linear"}];
+{name:"Хлеб пшеничный",portion:"1 кусок (20г)",carbs:15,icon:"solar:bread-linear"},
+{name:"Хлеб ржаной",portion:"1 кусок (25г)",carbs:13,icon:"solar:bread-linear"},
+{name:"Гречка",portion:"50г",carbs:35,icon:"solar:plate-linear"},
+{name:"Рис",portion:"50г",carbs:36,icon:"solar:plate-linear"},
+{name:"Макароны",portion:"50г",carbs:30,icon:"solar:plate-linear"},
+{name:"Картофель",portion:"90г",carbs:20,icon:"solar:leaf-linear"},
+{name:"Яблоко",portion:"90г",carbs:12,icon:"solar:apple-linear"},
+{name:"Банан",portion:"70г",carbs:15,icon:"solar:apple-linear"},
+{name:"Апельсин",portion:"150г",carbs:14,icon:"solar:apple-linear"},
+{name:"Арбуз",portion:"270г",carbs:18,icon:"solar:apple-linear"},
+{name:"Сыр",portion:"30г",carbs:1,icon:"solar:cheese-linear"}, // неуглеводный
+{name:"Молоко",portion:"200мл",carbs:10,icon:"solar:milk-linear"},
+{name:"Курица",portion:"100г",carbs:0,icon:"solar:meat-linear"}, // неуглеводный
+{name:"Яйцо",portion:"1 шт",carbs:0,icon:"solar:egg-linear"},
+{name:"Огурец",portion:"100г",carbs:3,icon:"solar:leaf-linear"},
+{name:"Помидор",portion:"100г",carbs:4,icon:"solar:leaf-linear"},
+{name:"Лимон",portion:"1 шт",carbs:3,icon:"solar:apple-linear"},
+{name:"Мед",portion:"1 ст. ложка",carbs:17,icon:"solar:honey-linear"},
+{name:"Йогурт",portion:"150г",carbs:5,icon:"solar:milk-linear"},
+{name:"Кефир",portion:"200мл",carbs:5,icon:"solar:milk-linear"},
+{name:"Салат",portion:"100г",carbs:2,icon:"solar:leaf-linear"},
+{name:"Творог",portion:"100г",carbs:2,icon:"solar:cheese-linear"},
+{name:"Вода",portion:"200мл",carbs:0,icon:"solar:drop-linear"}
+];
 
 // Рендер продуктов
 const foodGrid=document.getElementById("foodGrid");
@@ -218,8 +212,19 @@ function renderFood(filter=""){
   });
 }
 function addFood(food){ selected.push(food); renderPlate(); checkGifts(); }
-function removeFood(index){ selected.splice(index,1); renderPlate(); }
-function renderPlate(){ selectedItems.innerHTML=""; selected.forEach((f,i)=>{ const row=document.createElement("div"); row.className="glass rounded-xl px-3 py-2 flex justify-between"; row.innerHTML=`<div>${f.name}</div><button onclick="removeFood(${i})">✕</button>`; selectedItems.appendChild(row); }); xeTotal.innerText=selected.length; }
+function removeFood(index){ selected.splice(index,1); renderPlate(); checkGifts(); }
+function renderPlate(){
+  selectedItems.innerHTML="";
+  let totalXE=0;
+  selected.forEach((f,i)=>{
+    if(f.carbs>0) totalXE += f.carbs/10; // считаем только углеводы
+    const row=document.createElement("div");
+    row.className="glass rounded-xl px-3 py-2 flex justify-between";
+    row.innerHTML=`<div>${f.name}</div><button onclick="removeFood(${i})">✕</button>`;
+    selectedItems.appendChild(row);
+  });
+  xeTotal.innerText=totalXE.toFixed(2);
+}
 searchInput.addEventListener("input",e=>renderFood(e.target.value));
 renderFood();
 
@@ -228,7 +233,15 @@ const carbsInput=document.getElementById("carbsInput");
 const weightInput=document.getElementById("weightInput");
 const xeType=document.getElementById("xeType");
 const xeResult=document.getElementById("xeResult");
-function calc(){ const carbs=parseFloat(carbsInput.value); const weight=parseFloat(weightInput.value); const xe=parseFloat(xeType.value); if(!carbs||!weight){ xeResult.innerText="0 ХЕ"; return; } const totalCarbs=carbs*weight/100; const result=totalCarbs/xe; xeResult.innerText=result.toFixed(2)+" ХЕ"; }
+function calc(){ 
+  const carbs=parseFloat(carbsInput.value);
+  const weight=parseFloat(weightInput.value);
+  const xe=parseFloat(xeType.value);
+  if(!carbs||!weight){ xeResult.innerText="0 ХЕ"; return; }
+  const totalCarbs=carbs*weight/100;
+  const result=totalCarbs/xe;
+  xeResult.innerText=result.toFixed(2)+" ХЕ";
+}
 carbsInput.addEventListener("input",calc);
 weightInput.addEventListener("input",calc);
 xeType.addEventListener("change",calc);
@@ -245,13 +258,9 @@ const avatarInput=document.getElementById("avatarInput");
 avatarInput.onchange=function(){
   const file=this.files[0];
   const reader=new FileReader();
-  reader.onload=function(e){
-    avatar.src=e.target.result;
-    localStorage.setItem("avatar",e.target.result);
-  }
+  reader.onload=function(e){ avatar.src=e.target.result; localStorage.setItem("avatar",e.target.result); }
   reader.readAsDataURL(file);
 }
-
 function editProfile(){ profileEdit.style.display="block"; }
 function saveProfile(){ localStorage.setItem("name",profileName.value); localStorage.setItem("target",profileTarget.value); loadProfile(); profileEdit.style.display="none"; }
 function loadProfile(){
@@ -268,13 +277,11 @@ const gifts=document.querySelectorAll(".gift");
 const modal=document.getElementById("giftModal");
 const giftTitle=document.getElementById("giftTitle");
 const giftDesc=document.getElementById("giftDesc");
-
 function checkGifts(){
-  const xeCount=selected.length;
-  if(xeCount>=2) document.getElementById("gift1").classList.add("unlocked");
-  if(xeCount>=5) document.getElementById("gift2").classList.add("unlocked");
+  const xeCount=selected.reduce((sum,f)=>sum+ (f.carbs>0? f.carbs/10:0),0);
+  if(xeCount>=20) document.getElementById("gift1").classList.add("unlocked");
+  if(xeCount>=50) document.getElementById("gift2").classList.add("unlocked"); // Порядок дня
 }
-
 gifts.forEach(g=>{
   g.addEventListener("click",()=>{
     if(g.classList.contains("unlocked")){
@@ -284,7 +291,6 @@ gifts.forEach(g=>{
     }
   });
 });
-
 function closeModal(){ modal.classList.remove("show"); }
 </script>
 
