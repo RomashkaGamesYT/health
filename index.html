@@ -4,302 +4,342 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Healthier</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
-<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
 <style>
 body{
-  font-family:'Unbounded',sans-serif;
-  background: radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
-              radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
-              #f6f7fb;
-  margin:0;
-  min-height:100vh;
-  padding-bottom:100px;
+    font-family:'Unbounded',sans-serif;
+    background:
+    radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
+    radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
+    #f6f7fb;
+    overflow-x:hidden;
 }
 .glass{
-  background:rgba(255,255,255,0.55);
-  backdrop-filter: blur(20px);
-  border:1px solid rgba(255,255,255,0.6);
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  transition:all .25s cubic-bezier(.25,.8,.25,1);
+    background:rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px);
+    border:1px solid rgba(255,255,255,0.6);
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    transition:all .25s cubic-bezier(.25,.8,.25,1);
 }
 .glass:hover{
-  transform:translateY(-2px) scale(1.01);
-}
-.page{
-  display:none;
-  opacity:0;
-  transform:translateY(10px);
-  transition:all .35s cubic-bezier(.34,1.56,.64,1);
-}
-.page.active{
-  display:block;
-  opacity:1;
-  transform:translateY(0);
-}
-.card{
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(15px);
-  border-radius:16px;
-  padding:12px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
-input, select, button{
-  font-family:'Unbounded',sans-serif;
-}
-input, select{
-  border:1px solid rgba(0,0,0,0.1);
-  border-radius:12px;
-  padding:10px;
-  width:100%;
-}
-button{
-  border:none;
-  background:#4f8ef7;
-  color:#fff;
-  padding:8px 12px;
-  border-radius:12px;
-  cursor:pointer;
+    transform:translateY(-3px) scale(1.01);
 }
 .dock{
-  position: fixed;
-  bottom: 12px;
-  left:50%;
-  transform:translateX(-50%);
-  width:95%;
-  max-width:420px;
-  background:rgba(255,255,255,0.55);
-  backdrop-filter: blur(30px);
-  border:1px solid rgba(255,255,255,0.7);
-  border-radius:30px;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 0;
-  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    background:rgba(255,255,255,0.55);
+    backdrop-filter: blur(30px);
+    border:1px solid rgba(255,255,255,0.7);
+    transition: all .3s ease;
 }
-.dock button{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  font-size:12px;
-  background:none;
-  color:#333;
-  padding:0;
+.page{
+    display:none;
+    opacity:0;
+    transform:translateY(12px);
+    transition:all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.page.active{
+    display:block;
+    opacity:1;
+    transform:translateY(0);
 }
 .gift{
-  width:70px;
-  height:70px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  margin-right:8px;
+    width:70px;
+    height:70px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    background:rgba(255,255,255,.6);
+    backdrop-filter:blur(10px);
+    cursor:pointer;
+    transition: all 0.25s ease;
+}
+.gift:hover{
+    transform: scale(1.1);
+}
+.modal-bg{
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition: all 0.3s ease;
+}
+.modal-bg.active{
+    opacity:1;
+    pointer-events:auto;
+}
+.modal{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    max-width:320px;
+    text-align:center;
+    animation:fadeIn .4s ease forwards;
+}
+.modal img{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:16px;
+    margin-bottom:12px;
+}
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen text-gray-900 pb-32">
 
-<div class="max-w-2xl mx-auto px-4 py-8">
+<div class="max-w-5xl mx-auto px-4 py-8">
 
 <header class="flex justify-between items-center mb-8">
-  <div class="flex items-center gap-3">
-    <div class="w-12 h-12 glass rounded-xl flex items-center justify-center">
-      <iconify-icon icon="solar:health-linear" width="28"></iconify-icon>
+
+<div class="flex items-center gap-3">
+    <div class="w-10 h-10 glass rounded-xl flex items-center justify-center">
+        <iconify-icon icon="solar:health-linear"></iconify-icon>
     </div>
     <div class="text-2xl font-semibold">Healthier</div>
-  </div>
-  <div class="glass px-4 py-2 rounded-full text-sm">
-    1 ХЕ ≈ 10-12 г
-  </div>
+</div>
+
+<div class="glass px-4 py-2 rounded-full text-sm">1 ХЕ ≈ 10-12 г</div>
 </header>
 
 <!-- HOME -->
 <div id="home" class="page active">
-  <input id="searchInput" class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none" placeholder="Найти продукт...">
-  <div id="foodGrid"></div>
+<input id="searchInput"
+class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none"
+placeholder="Найти продукт...">
+<div id="foodGrid" class="grid md:grid-cols-2 gap-3"></div>
 </div>
 
 <!-- PLATE -->
 <div id="platePage" class="page">
-  <div class="glass rounded-3xl p-6">
-    <h2 class="mb-4 text-lg flex items-center gap-2">
-      <iconify-icon icon="solar:plate-linear"></iconify-icon>
-      Моя тарелка
-    </h2>
-    <div id="selectedItems" class="mb-4"></div>
-    <div class="text-lg font-semibold">Всего: <span id="xeTotal">0</span> ХЕ</div>
-  </div>
+<div class="glass rounded-3xl p-6">
+<h2 class="mb-4 text-lg flex items-center gap-2">
+<iconify-icon icon="solar:plate-linear"></iconify-icon>
+Моя тарелка
+</h2>
+<div id="selectedItems" class="space-y-2 mb-4"></div>
+<div class="text-lg font-semibold">
+Всего: <span id="xeTotal">0</span> ХЕ
+</div>
+</div>
 </div>
 
 <!-- CALCULATOR -->
 <div id="calculatorPage" class="page">
-  <div class="glass rounded-3xl p-6">
-    <h2 class="text-lg mb-4 flex items-center gap-2">
-      <iconify-icon icon="solar:calculator-linear"></iconify-icon>
-      Калькулятор ХЕ
-    </h2>
-    <div class="grid gap-3 mb-4">
-      <input id="carbsInput" type="number" class="glass rounded-xl px-3 py-3" placeholder="Углеводы на 100г">
-      <input id="weightInput" type="number" class="glass rounded-xl px-3 py-3" placeholder="Вес / мл">
-      <select id="xeType" class="glass rounded-xl px-3 py-3">
-        <option value="10">1 ХЕ = 10г</option>
-        <option value="12">1 ХЕ = 12г</option>
-      </select>
-    </div>
-    <div class="text-center text-4xl font-bold" id="xeResult">0 ХЕ</div>
-  </div>
+<div class="glass rounded-3xl p-6">
+<h2 class="text-lg mb-4 flex items-center gap-2">
+<iconify-icon icon="solar:calculator-linear"></iconify-icon>
+Калькулятор ХЕ
+</h2>
+<div class="grid md:grid-cols-3 gap-3">
+<input id="carbsInput" type="number"
+class="glass rounded-xl px-3 py-3"
+placeholder="углеводы на 100г">
+<input id="weightInput" type="number"
+class="glass rounded-xl px-3 py-3"
+placeholder="вес / мл">
+<select id="xeType" class="glass rounded-xl px-3 py-3">
+<option value="10">1 ХЕ = 10г</option>
+<option value="12">1 ХЕ = 12г</option>
+</select>
+</div>
+<div class="text-center mt-6">
+<div id="xeResult" class="text-4xl font-bold">0 ХЕ</div>
+</div>
+</div>
 </div>
 
 <!-- PROFILE -->
 <div id="profilePage" class="page">
-  <div class="glass rounded-3xl p-6 text-center">
-    <img id="avatar" src="https://i.imgur.com/2DhmtJ4.png" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
-    <input type="file" id="avatarInput" hidden>
-    <button onclick="avatarInput.click()" class="glass px-3 py-1 rounded-xl mb-4 text-sm">Изменить фото</button>
-
-    <div id="profileInfo">
-      <div class="text-xl font-semibold" id="profileNameText">Пользователь</div>
-      <div class="text-gray-500 mb-4" id="profileTargetText">Цель: 0 ХЕ</div>
-      <button onclick="editProfile()" class="glass px-4 py-2 rounded-xl">Редактировать</button>
-    </div>
-
-    <div id="profileEdit" style="display:none">
-      <input id="profileName" class="glass rounded-xl px-3 py-2 w-full mb-2" placeholder="Имя">
-      <input id="profileTarget" class="glass rounded-xl px-3 py-2 w-full mb-4" placeholder="Цель ХЕ">
-      <button onclick="saveProfile()" class="glass px-4 py-2 rounded-xl">Сохранить</button>
-    </div>
-  </div>
-
-  <div class="glass rounded-3xl p-6 mt-6">
-    <h3 class="mb-4 font-semibold">Подарки / достижения</h3>
-    <div class="flex gap-3">
-      <div class="gift">🍔</div>
-      <div class="gift">📈</div>
-      <div class="gift">🏅</div>
-    </div>
-  </div>
+<div class="glass rounded-3xl p-6 text-center">
+<img id="avatar" src="https://i.imgur.com/2DhmtJ4.png" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+<input type="file" id="avatarInput" hidden>
+<button onclick="avatarInput.click()" class="glass px-3 py-1 rounded-xl mb-4 text-sm">Изменить фото</button>
+<div id="profileInfo">
+<div class="text-xl font-semibold" id="profileNameText">Пользователь</div>
+<div class="text-gray-500 mb-4" id="profileTargetText">Цель: 0 ХЕ</div>
+<button onclick="editProfile()" class="glass px-4 py-2 rounded-xl">Редактировать</button>
+</div>
+<div id="profileEdit" style="display:none">
+<input id="profileName" class="glass rounded-xl px-3 py-2 w-full mb-2" placeholder="Имя">
+<input id="profileTarget" class="glass rounded-xl px-3 py-2 w-full mb-4" placeholder="Цель ХЕ">
+<button onclick="saveProfile()" class="glass px-4 py-2 rounded-xl">Сохранить</button>
+</div>
 </div>
 
+<div class="glass rounded-3xl p-6 mt-6">
+<h3 class="mb-4 font-semibold">Подарки</h3>
+<div class="flex gap-3 flex-wrap" id="giftsContainer"></div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div id="giftModal" class="modal-bg">
+<div class="modal">
+<img id="giftImg" src="">
+<div class="text-xl font-semibold" id="giftName"></div>
+<div class="text-gray-500 mt-2" id="giftDesc"></div>
+<button onclick="closeModal()" class="glass px-4 py-2 rounded-xl mt-4">Закрыть</button>
+</div>
 </div>
 
 <!-- DOCK -->
-<div class="dock">
-  <button onclick="openPage('home')"><iconify-icon icon="solar:home-linear" width="24"></iconify-icon>Главная</button>
-  <button onclick="openPage('calculatorPage')"><iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>ХЕ</button>
-  <button onclick="openPage('platePage')"><iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>День</button>
-  <button onclick="openPage('profilePage')"><iconify-icon icon="solar:user-linear" width="24"></iconify-icon>Профиль</button>
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[96%] max-w-lg dock rounded-3xl px-6 py-3 flex justify-between">
+<button onclick="openPage('home')" class="flex flex-col items-center text-xs">
+<iconify-icon icon="solar:home-linear" width="24"></iconify-icon>
+Главная
+</button>
+<button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-xs">
+<iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>
+ХЕ
+</button>
+<button onclick="openPage('platePage')" class="flex flex-col items-center text-xs">
+<iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>
+День
+</button>
+<button onclick="openPage('profilePage')" class="flex flex-col items-center text-xs">
+<iconify-icon icon="solar:user-linear" width="24"></iconify-icon>
+Профиль
+</button>
 </div>
 
 <script>
-// ---- страницы ----
+// PAGE NAV
 function openPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
-  document.getElementById(id).classList.add("active")
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+document.getElementById(id).classList.add("active")
 }
 
-// ---- продукты ----
+// FOODS
 const foods=[
-  {name:"Хлеб",portion:"1 кусок"},
-  {name:"Гречка",portion:"50г"},
-  {name:"Рис",portion:"50г"},
-  {name:"Картофель",portion:"90г"},
-  {name:"Яблоко",portion:"90г"},
-  {name:"Банан",portion:"70г"}
+{name:"Хлеб",portion:"1 кусок"},
+{name:"Гречка",portion:"50г"},
+{name:"Рис",portion:"50г"},
+{name:"Картофель",portion:"90г"},
+{name:"Яблоко",portion:"90г"},
+{name:"Банан",portion:"70г"},
+{name:"Морковь",portion:"100г"},
+{name:"Курица",portion:"100г"},
+{name:"Сыр",portion:"30г"},
+{name:"Молоко",portion:"200мл"}
 ]
 const foodGrid=document.getElementById("foodGrid")
 const searchInput=document.getElementById("searchInput")
 const selectedItems=document.getElementById("selectedItems")
 const xeTotal=document.getElementById("xeTotal")
 let selected=[]
-
 function renderFood(filter=""){
-  foodGrid.innerHTML=""
-  foods.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase())).forEach(food=>{
-    const card=document.createElement("div")
-    card.className="card cursor-pointer"
-    card.innerHTML=`<div>${food.name}<br><span class="text-sm text-gray-500">${food.portion} = 1 ХЕ</span></div>
-                    <button>Добавить</button>`
-    card.querySelector("button").onclick=()=>{selected.push(food); renderPlate();}
-    foodGrid.appendChild(card)
-  })
+foodGrid.innerHTML=""
+foods.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase()))
+.forEach(food=>{
+const card=document.createElement("div")
+card.className="glass p-4 rounded-2xl flex justify-between cursor-pointer"
+card.onclick=()=>addFood(food)
+card.innerHTML=`
+<div>
+<div>${food.name}</div>
+<div class="text-sm text-gray-500">${food.portion} = 1 ХЕ</div>
+</div>
+<iconify-icon icon="solar:add-circle-linear"></iconify-icon>
+`
+foodGrid.appendChild(card)
+})
 }
-
+function addFood(food){selected.push(food); renderPlate(); checkGifts();}
+function removeFood(i){selected.splice(i,1); renderPlate();}
 function renderPlate(){
-  selectedItems.innerHTML=""
-  selected.forEach((f,i)=>{
-    const row=document.createElement("div")
-    row.className="card"
-    row.innerHTML=`<span>${f.name}</span><button onclick="selected.splice(${i},1); renderPlate();">✕</button>`
-    selectedItems.appendChild(row)
-  })
-  xeTotal.innerText=selected.length
+selectedItems.innerHTML=""
+selected.forEach((f,i)=>{
+const row=document.createElement("div")
+row.className="glass rounded-xl px-3 py-2 flex justify-between"
+row.innerHTML=`<div>${f.name}</div><button onclick="removeFood(${i})">✕</button>`
+selectedItems.appendChild(row)
+})
+xeTotal.innerText=selected.length
 }
-searchInput.addEventListener("input",e=>renderFood(e.target.value))
-renderFood()
 
-// ---- калькулятор ----
-const carbsInput=document.getElementById("carbsInput")
-const weightInput=document.getElementById("weightInput")
-const xeType=document.getElementById("xeType")
-const xeResult=document.getElementById("xeResult")
-
+// CALCULATOR
 function calc(){
-  const carbs=parseFloat(carbsInput.value)
-  const weight=parseFloat(weightInput.value)
-  const xe=parseFloat(xeType.value)
-  if(!carbs||!weight){xeResult.innerText="0 ХЕ"; return}
-  xeResult.innerText=((carbs*weight/100)/xe).toFixed(2)+" ХЕ"
+const carbs=parseFloat(carbsInput.value)
+const weight=parseFloat(weightInput.value)
+const xe=parseFloat(xeType.value)
+if(!carbs||!weight){ xeResult.innerText="0 ХЕ"; return }
+const total=carbs*weight/100
+const result=total/xe
+xeResult.innerText=result.toFixed(2)+" ХЕ"
 }
 carbsInput.addEventListener("input",calc)
 weightInput.addEventListener("input",calc)
 xeType.addEventListener("change",calc)
 
-// ---- профиль ----
-const avatar=document.getElementById("avatar")
-const avatarInput=document.getElementById("avatarInput")
-const profileNameText=document.getElementById("profileNameText")
-const profileTargetText=document.getElementById("profileTargetText")
-const profileInfo=document.getElementById("profileInfo")
-const profileEdit=document.getElementById("profileEdit")
-const profileName=document.getElementById("profileName")
-const profileTarget=document.getElementById("profileTarget")
-
+// PROFILE
 avatarInput.onchange=function(){
-  const file=this.files[0]
-  const reader=new FileReader()
-  reader.onload=function(e){
-    avatar.src=e.target.result
-    localStorage.setItem("avatar",e.target.result)
-  }
-  reader.readAsDataURL(file)
+const file=this.files[0]
+const reader=new FileReader()
+reader.onload=function(e){
+avatar.src=e.target.result
+localStorage.setItem("avatar",e.target.result)
 }
-
-function editProfile(){
-  profileInfo.style.display="none"
-  profileEdit.style.display="block"
+reader.readAsDataURL(file)
 }
-
+function editProfile(){profileInfo.style.display="none"; profileEdit.style.display="block";}
 function saveProfile(){
-  localStorage.setItem("name",profileName.value)
-  localStorage.setItem("target",profileTarget.value)
-  loadProfile()
-  profileEdit.style.display="none"
-  profileInfo.style.display="block"
+localStorage.setItem("name",profileName.value)
+localStorage.setItem("target",profileTarget.value)
+loadProfile()
+profileEdit.style.display="none"
+profileInfo.style.display="block"
 }
-
 function loadProfile(){
-  profileNameText.innerText=localStorage.getItem("name")||"Пользователь"
-  profileTargetText.innerText="Цель: "+(localStorage.getItem("target")||0)+" ХЕ"
-  profileName.value=localStorage.getItem("name")||""
-  profileTarget.value=localStorage.getItem("target")||""
-  if(localStorage.getItem("avatar")) avatar.src=localStorage.getItem("avatar")
+profileNameText.innerText=localStorage.getItem("name")||"Пользователь"
+profileTargetText.innerText="Цель: "+(localStorage.getItem("target")||0)+" ХЕ"
+profileName.value=localStorage.getItem("name")||""
+profileTarget.value=localStorage.getItem("target")||""
+if(localStorage.getItem("avatar")) avatar.src=localStorage.getItem("avatar")
 }
 loadProfile()
+
+// GIFTS
+const gifts=[
+{img:"Gifts/gift1_burger.png",name:"🍔 Маленький Обжора",desc:"Добавь 5 продуктов и получи этот подарок!","condition":()=>selected.length>=5},
+{img:"Gifts/gift2_cup.png",name:"🏆 Кубок",desc:"Заполни цель ХЕ и получи кубок!","condition":()=>parseInt(localStorage.getItem("target")||0)<=selected.length}
+]
+const giftsContainer=document.getElementById("giftsContainer")
+function renderGifts(){
+giftsContainer.innerHTML=""
+gifts.forEach((g,i)=>{
+const div=document.createElement("div")
+div.className="gift"
+div.onclick=()=>showGift(i)
+div.innerHTML=`<img src="${g.img}" class="w-12 h-12 object-cover rounded-lg">`
+g.unlocked=g.condition()
+if(!g.unlocked) div.style.opacity=0.4
+g.divRef=div
+giftsContainer.appendChild(div)
+})
+}
+function checkGifts(){ renderGifts(); }
+function showGift(i){
+const gift=gifts[i]
+if(!gift.unlocked){ alert("Подарок еще не получен!"); return; }
+document.getElementById("giftImg").src=gift.img
+document.getElementById("giftName").innerText=gift.name
+document.getElementById("giftDesc").innerText=gift.desc
+document.getElementById("giftModal").classList.add("active")
+}
+function closeModal(){ document.getElementById("giftModal").classList.remove("active"); }
+renderGifts()
 </script>
 </body>
 </html>
