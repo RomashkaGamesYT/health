@@ -63,7 +63,11 @@ body{
   cursor:pointer;
   background-size: cover;
   background-position: center;
-  transition: transform .3s;
+  opacity: 0.3;
+  transition: transform .3s, opacity .3s;
+}
+.gift.unlocked{
+  opacity:1;
 }
 .gift:hover{
   transform: scale(1.1);
@@ -76,12 +80,13 @@ body{
   transform: translateX(-50%) translateY(100%);
   width: 90%;
   max-width: 400px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(20px);
   border-radius: 1.5rem 1.5rem 0 0;
   padding: 1.5rem;
   box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
   transition: transform .3s;
+  z-index: 100;
 }
 .modal.show{
   transform: translateX(-50%) translateY(0);
@@ -102,7 +107,6 @@ body{
   border-radius:.75rem;
   cursor:pointer;
 }
-
 </style>
 </head>
 <body class="min-h-screen text-gray-900 pb-32">
@@ -160,19 +164,29 @@ body{
 
   <!-- PROFILE -->
   <div id="profilePage" class="page">
+
     <div class="glass rounded-3xl p-6 text-center">
       <iconify-icon icon="solar:user-circle-linear" width="60"></iconify-icon>
-      <div class="mt-4 text-xl font-semibold">Профиль</div>
-      <div class="text-gray-500">Healthier пользователь</div>
+      <div class="mt-4 text-xl font-semibold" id="profileNameText">Пользователь</div>
+      <div class="text-gray-500" id="profileTargetText">Цель: 0 ХЕ</div>
+
+      <div id="profileEdit" style="display:none" class="mt-4">
+        <input id="profileName" class="glass rounded-xl px-3 py-2 w-full mb-2" placeholder="Имя">
+        <input id="profileTarget" class="glass rounded-xl px-3 py-2 w-full mb-4" placeholder="Цель ХЕ">
+        <button onclick="saveProfile()" class="glass px-4 py-2 rounded-xl">Сохранить</button>
+      </div>
+
+      <button onclick="editProfile()" class="glass px-4 py-2 rounded-xl mt-2">Редактировать профиль</button>
     </div>
 
     <div class="glass rounded-3xl p-6 mt-6">
       <h3 class="mb-2 font-semibold">Достижения</h3>
       <div class="flex gap-3 justify-center flex-wrap" id="giftsContainer">
-        <div class="gift" data-name="Маленький Обжора" data-desc="Перестал переедать" style="background:url('Gifts/gift1_burger.png') no-repeat center/cover;"></div>
-        <div class="gift" data-name="Сахарный график" data-desc="Заполнил полностью график сахара" style="background:url('Gifts/gift2_cup.png') no-repeat center/cover;"></div>
+        <div class="gift" data-name="Маленький Обжора" data-desc="Перестал переедать" id="gift1" style="background:url('Gifts/gift1_burger.png') no-repeat center/cover;"></div>
+        <div class="gift" data-name="Сахарный график" data-desc="Заполнил полностью график сахара" id="gift2" style="background:url('Gifts/gift2_cup.png') no-repeat center/cover;"></div>
       </div>
     </div>
+
   </div>
 
 </div>
@@ -205,7 +219,7 @@ body{
 </div>
 
 <script>
-// Переходы между страницами
+// Переходы страниц
 function openPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -250,7 +264,11 @@ function renderFood(filter=""){
     foodGrid.appendChild(card);
   });
 }
-function addFood(food){ selected.push(food); renderPlate(); }
+function addFood(food){ 
+  selected.push(food); 
+  renderPlate();
+  checkGifts();
+}
 function removeFood(index){ selected.splice(index,1); renderPlate(); }
 function renderPlate(){
   selectedItems.innerHTML="";
@@ -283,17 +301,49 @@ carbsInput.addEventListener("input",calc);
 weightInput.addEventListener("input",calc);
 xeType.addEventListener("change",calc);
 
+// Профиль
+const profileNameText=document.getElementById("profileNameText");
+const profileTargetText=document.getElementById("profileTargetText");
+const profileEdit=document.getElementById("profileEdit");
+const profileName=document.getElementById("profileName");
+const profileTarget=document.getElementById("profileTarget");
+
+function editProfile(){
+  profileEdit.style.display="block";
+}
+function saveProfile(){
+  localStorage.setItem("name",profileName.value);
+  localStorage.setItem("target",profileTarget.value);
+  loadProfile();
+  profileEdit.style.display="none";
+}
+function loadProfile(){
+  profileNameText.innerText = localStorage.getItem("name") || "Пользователь";
+  profileTargetText.innerText = "Цель: "+(localStorage.getItem("target") || 0)+" ХЕ";
+  profileName.value = localStorage.getItem("name") || "";
+  profileTarget.value = localStorage.getItem("target") || "";
+}
+loadProfile();
+
 // Подарки
 const gifts=document.querySelectorAll(".gift");
 const modal=document.getElementById("giftModal");
 const giftTitle=document.getElementById("giftTitle");
 const giftDesc=document.getElementById("giftDesc");
 
+function checkGifts(){
+  const xeCount = selected.length; // Можно менять условие
+  if(xeCount>=2){ document.getElementById("gift1").classList.add("unlocked"); }
+  if(xeCount>=5){ document.getElementById("gift2").classList.add("unlocked"); }
+}
+
 gifts.forEach(g=>{
   g.addEventListener("click",()=>{
-    giftTitle.innerText=g.dataset.name;
-    giftDesc.innerText=g.dataset.desc;
-    modal.classList.add("show");
+    if(g.classList.contains("unlocked")){
+      giftTitle.innerText=g.dataset.name;
+      giftDesc.innerText=g.dataset.desc;
+      modal.classList.add("show");
+    }
   });
 });
 
