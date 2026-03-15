@@ -28,11 +28,11 @@ background:rgba(255,255,255,0.55);
 backdrop-filter: blur(20px);
 border:1px solid rgba(255,255,255,0.6);
 box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:0.25s;
+transition:all .25s cubic-bezier(.25,.8,.25,1);
 }
 
 .glass:hover{
-transform:translateY(-2px);
+transform:translateY(-3px) scale(1.01);
 }
 
 .dock{
@@ -44,14 +44,26 @@ border:1px solid rgba(255,255,255,0.7);
 .page{
 display:none;
 opacity:0;
-transform:translateY(10px);
-transition:0.35s;
+transform:translateY(12px);
+transition:all .35s cubic-bezier(.34,1.56,.64,1);
 }
 
 .page.active{
 display:block;
 opacity:1;
 transform:translateY(0);
+}
+
+.gift{
+width:70px;
+height:70px;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+background:rgba(255,255,255,.6);
+backdrop-filter:blur(10px);
 }
 
 </style>
@@ -70,7 +82,9 @@ transform:translateY(0);
 <iconify-icon icon="solar:health-linear"></iconify-icon>
 </div>
 
-<div class="text-2xl font-semibold">Healthier</div>
+<div class="text-2xl font-semibold">
+Healthier
+</div>
 
 </div>
 
@@ -91,17 +105,14 @@ placeholder="Найти продукт...">
 
 </div>
 
-
 <!-- PLATE -->
 <div id="platePage" class="page">
 
 <div class="glass rounded-3xl p-6">
 
 <h2 class="mb-4 text-lg flex items-center gap-2">
-
 <iconify-icon icon="solar:plate-linear"></iconify-icon>
 Моя тарелка
-
 </h2>
 
 <div id="selectedItems" class="space-y-2 mb-4"></div>
@@ -114,31 +125,21 @@ placeholder="Найти продукт...">
 
 </div>
 
-
 <!-- CALCULATOR -->
 <div id="calculatorPage" class="page">
 
 <div class="glass rounded-3xl p-6">
 
-<h2 class="text-lg mb-4 flex gap-2 items-center">
-
+<h2 class="text-lg mb-4 flex items-center gap-2">
 <iconify-icon icon="solar:calculator-linear"></iconify-icon>
 Калькулятор ХЕ
-
 </h2>
-
-<select id="calcMode" class="glass rounded-xl px-3 py-2 mb-4">
-
-<option value="food">Готовый продукт</option>
-<option value="liquid">Жидкость (мл)</option>
-
-</select>
 
 <div class="grid md:grid-cols-3 gap-3">
 
 <input id="carbsInput" type="number"
 class="glass rounded-xl px-3 py-3"
-placeholder="углеводы на 100">
+placeholder="углеводы на 100г">
 
 <input id="weightInput" type="number"
 class="glass rounded-xl px-3 py-3"
@@ -165,74 +166,101 @@ placeholder="вес / мл">
 
 </div>
 
-
 <!-- PROFILE -->
 <div id="profilePage" class="page">
 
-<div class="glass rounded-3xl p-6">
+<div class="glass rounded-3xl p-6 text-center">
 
-<h2 class="text-lg mb-4">Профиль</h2>
+<img id="avatar"
+src="https://i.imgur.com/2DhmtJ4.png"
+class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
 
-<label class="text-sm text-gray-500">Имя</label>
+<input type="file" id="avatarInput" hidden>
+
+<button onclick="avatarInput.click()"
+class="glass px-3 py-1 rounded-xl mb-4 text-sm">
+
+Изменить фото
+
+</button>
+
+<div id="profileInfo">
+
+<div class="text-xl font-semibold" id="profileNameText">
+Пользователь
+</div>
+
+<div class="text-gray-500 mb-4" id="profileTargetText">
+Цель: 0 ХЕ
+</div>
+
+<button onclick="editProfile()" class="glass px-4 py-2 rounded-xl">
+Редактировать
+</button>
+
+</div>
+
+<div id="profileEdit" style="display:none">
 
 <input id="profileName"
-class="glass rounded-xl px-3 py-2 w-full mb-3">
-
-<label class="text-sm text-gray-500">Цель ХЕ в день</label>
+class="glass rounded-xl px-3 py-2 w-full mb-2"
+placeholder="Имя">
 
 <input id="profileTarget"
-class="glass rounded-xl px-3 py-2 w-full mb-4">
+class="glass rounded-xl px-3 py-2 w-full mb-4"
+placeholder="Цель ХЕ">
 
-<button onclick="saveProfile()"
-class="glass px-4 py-2 rounded-xl">
-
+<button onclick="saveProfile()" class="glass px-4 py-2 rounded-xl">
 Сохранить
-
 </button>
 
 </div>
 
 </div>
 
+<div class="glass rounded-3xl p-6 mt-6">
+
+<h3 class="mb-4 font-semibold">Подарки</h3>
+
+<div class="flex gap-3">
+
+<div class="gift">🏅</div>
+<div class="gift">🎯</div>
+<div class="gift">🔥</div>
+
 </div>
 
+</div>
 
+</div>
+
+</div>
 
 <!-- DOCK -->
 
 <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md dock rounded-3xl px-6 py-3 flex justify-between">
 
 <button onclick="openPage('home')" class="flex flex-col items-center text-xs">
-
 <iconify-icon icon="solar:home-linear" width="24"></iconify-icon>
 Главная
-
 </button>
 
 <button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-xs">
-
 <iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>
 ХЕ
-
 </button>
 
 <button onclick="openPage('platePage')" class="flex flex-col items-center text-xs">
-
 <iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>
 День
-
 </button>
 
 <button onclick="openPage('profilePage')" class="flex flex-col items-center text-xs">
-
 <iconify-icon icon="solar:user-linear" width="24"></iconify-icon>
 Профиль
-
 </button>
 
 </div>
-
-
 
 <script>
 
@@ -246,16 +274,13 @@ document.getElementById(id).classList.add("active")
 
 }
 
-
-
 const foods=[
-{name:"Хлеб",portion:"1 кусок",icon:"solar:bread-linear"},
-{name:"Гречка",portion:"50г",icon:"solar:plate-linear"},
-{name:"Рис",portion:"50г",icon:"solar:plate-linear"},
-{name:"Картофель",portion:"90г",icon:"solar:leaf-linear"},
-{name:"Яблоко",portion:"90г",icon:"solar:apple-linear"},
-{name:"Апельсин",portion:"150г",icon:"solar:apple-linear"},
-{name:"Банан",portion:"70г",icon:"solar:apple-linear"}
+{name:"Хлеб",portion:"1 кусок"},
+{name:"Гречка",portion:"50г"},
+{name:"Рис",portion:"50г"},
+{name:"Картофель",portion:"90г"},
+{name:"Яблоко",portion:"90г"},
+{name:"Банан",portion:"70г"}
 ]
 
 const foodGrid=document.getElementById("foodGrid")
@@ -265,8 +290,6 @@ const selectedItems=document.getElementById("selectedItems")
 const xeTotal=document.getElementById("xeTotal")
 
 let selected=[]
-
-
 
 function renderFood(filter=""){
 
@@ -282,22 +305,11 @@ card.className="glass p-4 rounded-2xl flex justify-between cursor-pointer"
 card.onclick=()=>addFood(food)
 
 card.innerHTML=`
-
-<div class="flex gap-3">
-
-<iconify-icon icon="${food.icon}" width="24"></iconify-icon>
-
 <div>
-
 <div>${food.name}</div>
 <div class="text-sm text-gray-500">${food.portion} = 1 ХЕ</div>
-
 </div>
-
-</div>
-
 <iconify-icon icon="solar:add-circle-linear"></iconify-icon>
-
 `
 
 foodGrid.appendChild(card)
@@ -306,27 +318,19 @@ foodGrid.appendChild(card)
 
 }
 
-
-
 function addFood(food){
 
 selected.push(food)
-
 renderPlate()
 
 }
-
-
 
 function removeFood(i){
 
 selected.splice(i,1)
-
 renderPlate()
 
 }
-
-
 
 function renderPlate(){
 
@@ -339,10 +343,8 @@ const row=document.createElement("div")
 row.className="glass rounded-xl px-3 py-2 flex justify-between"
 
 row.innerHTML=`
-
 <div>${f.name}</div>
 <button onclick="removeFood(${i})">✕</button>
-
 `
 
 selectedItems.appendChild(row)
@@ -353,18 +355,8 @@ xeTotal.innerText=selected.length
 
 }
 
-
-
 searchInput.addEventListener("input",e=>renderFood(e.target.value))
-
 renderFood()
-
-
-
-const carbsInput=document.getElementById("carbsInput")
-const weightInput=document.getElementById("weightInput")
-const xeType=document.getElementById("xeType")
-const xeResult=document.getElementById("xeResult")
 
 function calc(){
 
@@ -388,23 +380,52 @@ carbsInput.addEventListener("input",calc)
 weightInput.addEventListener("input",calc)
 xeType.addEventListener("change",calc)
 
+avatarInput.onchange=function(){
 
+const file=this.files[0]
 
-function saveProfile(){
+const reader=new FileReader()
 
-localStorage.setItem("name",document.getElementById("profileName").value)
-localStorage.setItem("target",document.getElementById("profileTarget").value)
+reader.onload=function(e){
 
-alert("Сохранено")
+avatar.src=e.target.result
+localStorage.setItem("avatar",e.target.result)
 
 }
 
+reader.readAsDataURL(file)
 
+}
+
+function editProfile(){
+
+profileInfo.style.display="none"
+profileEdit.style.display="block"
+
+}
+
+function saveProfile(){
+
+localStorage.setItem("name",profileName.value)
+localStorage.setItem("target",profileTarget.value)
+
+loadProfile()
+
+profileEdit.style.display="none"
+profileInfo.style.display="block"
+
+}
 
 function loadProfile(){
 
-document.getElementById("profileName").value=localStorage.getItem("name")||""
-document.getElementById("profileTarget").value=localStorage.getItem("target")||""
+profileNameText.innerText=localStorage.getItem("name")||"Пользователь"
+profileTargetText.innerText="Цель: "+(localStorage.getItem("target")||0)+" ХЕ"
+
+profileName.value=localStorage.getItem("name")||""
+profileTarget.value=localStorage.getItem("target")||""
+
+if(localStorage.getItem("avatar"))
+avatar.src=localStorage.getItem("avatar")
 
 }
 
