@@ -4,179 +4,225 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Healthier</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
 <style>
 body{
-    font-family:'Unbounded',sans-serif;
-    background:
-    radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
-    radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
-    #f6f7fb;
+  font-family:'Unbounded',sans-serif;
+  background: radial-gradient(circle at 20% 20%, #dfe9ff, transparent),
+              radial-gradient(circle at 80% 30%, #e8f7ff, transparent),
+              #f6f7fb;
 }
+
 .glass{
-    background:rgba(255,255,255,0.55);
-    backdrop-filter: blur(20px);
-    border:1px solid rgba(255,255,255,0.6);
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
-    transition:all .25s cubic-bezier(.25,.8,.25,1);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(20px);
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  transition: all .25s cubic-bezier(.25,.8,.25,1);
 }
 .glass:hover{
-    transform:translateY(-2px) scale(1.01);
+  transform: translateY(-3px) scale(1.01);
 }
-.page{
-    display:none;
-    opacity:0;
-    transform:translateY(12px);
-    transition:all .35s cubic-bezier(.34,1.56,.64,1);
-}
-.page.active{
-    display:block;
-    opacity:1;
-    transform:translateY(0);
-}
+
 .dock{
-    background:rgba(255,255,255,0.55);
-    backdrop-filter: blur(30px);
-    border:1px solid rgba(255,255,255,0.7);
-    border-radius:2rem;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(30px);
+  border:1px solid rgba(255,255,255,0.7);
+  border-radius:2rem;
+  padding: .75rem 1.5rem;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
 }
+
+.page{
+  display:none;
+  opacity:0;
+  transform: translateY(12px);
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+}
+
+.page.active{
+  display:block;
+  opacity:1;
+  transform: translateY(0);
+}
+
 .gift{
-    width:70px;
-    height:70px;
-    border-radius:16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:28px;
-    background:rgba(255,255,255,.6);
-    backdrop-filter:blur(10px);
-    cursor:pointer;
-    transition:all .2s;
+  width:70px;
+  height:70px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  cursor:pointer;
+  background-size: cover;
+  background-position: center;
+  transition: transform .3s;
 }
 .gift:hover{
-    transform:scale(1.1);
+  transform: scale(1.1);
 }
+
+.modal{
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 90%;
+  max-width: 400px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 1.5rem 1.5rem 0 0;
+  padding: 1.5rem;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+  transition: transform .3s;
+}
+.modal.show{
+  transform: translateX(-50%) translateY(0);
+}
+.modal h3{
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+.modal p{
+  color: #555;
+}
+.modal button{
+  margin-top: 1rem;
+  background:#4f46e5;
+  color:#fff;
+  padding:.5rem 1rem;
+  border-radius:.75rem;
+  cursor:pointer;
+}
+
 </style>
 </head>
 <body class="min-h-screen text-gray-900 pb-32">
 
 <div class="max-w-5xl mx-auto px-4 py-8">
 
-<header class="flex justify-between items-center mb-8">
-<div class="flex items-center gap-3">
-    <div class="w-10 h-10 glass rounded-xl flex items-center justify-center">
+  <header class="flex justify-between items-center mb-8">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 glass rounded-xl flex items-center justify-center">
         <iconify-icon icon="solar:health-linear"></iconify-icon>
+      </div>
+      <div class="text-2xl font-semibold">Healthier</div>
     </div>
-    <div class="text-2xl font-semibold">Healthier</div>
-</div>
-<div class="glass px-4 py-2 rounded-full text-sm">1 ХЕ ≈ 10-12 г</div>
-</header>
+    <div class="glass px-4 py-2 rounded-full text-sm">1 ХЕ ≈ 10-12 г</div>
+  </header>
 
-<!-- HOME -->
-<div id="home" class="page active">
-<input id="searchInput" class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none" placeholder="Найти продукт...">
-<div id="foodGrid" class="grid md:grid-cols-2 gap-3"></div>
+  <!-- HOME -->
+  <div id="home" class="page active">
+    <input id="searchInput" class="glass w-full rounded-2xl px-5 py-4 mb-6 outline-none" placeholder="Найти продукт...">
+    <div id="foodGrid" class="grid md:grid-cols-2 gap-3"></div>
+  </div>
+
+  <!-- PLATE -->
+  <div id="platePage" class="page">
+    <div class="glass rounded-3xl p-6">
+      <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <iconify-icon icon="solar:plate-linear"></iconify-icon>
+        Моя тарелка
+      </h2>
+      <div id="selectedItems" class="space-y-2 mb-4"></div>
+      <div class="text-lg font-semibold">Всего: <span id="xeTotal">0</span> ХЕ</div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div id="calculatorPage" class="page">
+    <div class="glass rounded-3xl p-6">
+      <h2 class="text-lg font-semibold mb-6 flex items-center gap-2">
+        <iconify-icon icon="solar:calculator-linear"></iconify-icon>
+        Калькулятор ХЕ
+      </h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <input id="carbsInput" type="number" class="glass rounded-xl px-4 py-3" placeholder="Углеводы на 100г">
+        <input id="weightInput" type="number" class="glass rounded-xl px-4 py-3" placeholder="Вес (г)">
+        <select id="xeType" class="glass rounded-xl px-4 py-3">
+          <option value="10">1 ХЕ = 10г</option>
+          <option value="12">1 ХЕ = 12г</option>
+        </select>
+      </div>
+      <div class="text-center mt-6">
+        <div id="xeResult" class="text-4xl font-bold">0 ХЕ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="profilePage" class="page">
+    <div class="glass rounded-3xl p-6 text-center">
+      <iconify-icon icon="solar:user-circle-linear" width="60"></iconify-icon>
+      <div class="mt-4 text-xl font-semibold">Профиль</div>
+      <div class="text-gray-500">Healthier пользователь</div>
+    </div>
+
+    <div class="glass rounded-3xl p-6 mt-6">
+      <h3 class="mb-2 font-semibold">Достижения</h3>
+      <div class="flex gap-3 justify-center flex-wrap" id="giftsContainer">
+        <div class="gift" data-name="Маленький Обжора" data-desc="Перестал переедать" style="background:url('Gifts/gift1_burger.png') no-repeat center/cover;"></div>
+        <div class="gift" data-name="Сахарный график" data-desc="Заполнил полностью график сахара" style="background:url('Gifts/gift2_cup.png') no-repeat center/cover;"></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- PLATE -->
-<div id="platePage" class="page">
-<div class="glass rounded-3xl p-6">
-<h2 class="mb-4 text-lg flex items-center gap-2">
-    <iconify-icon icon="solar:plate-linear"></iconify-icon>
-    Моя тарелка
-</h2>
-<div id="selectedItems" class="space-y-2 mb-4"></div>
-<div class="text-lg font-semibold">Всего: <span id="xeTotal">0</span> ХЕ</div>
-</div>
-</div>
-
-<!-- CALCULATOR -->
-<div id="calculatorPage" class="page">
-<div class="glass rounded-3xl p-6">
-<h2 class="text-lg mb-4 flex items-center gap-2">
-    <iconify-icon icon="solar:calculator-linear"></iconify-icon>
-    Калькулятор ХЕ
-</h2>
-<div class="grid md:grid-cols-3 gap-3">
-<input id="carbsInput" type="number" class="glass rounded-xl px-3 py-3" placeholder="углеводы на 100г">
-<input id="weightInput" type="number" class="glass rounded-xl px-3 py-3" placeholder="вес / мл">
-<select id="xeType" class="glass rounded-xl px-3 py-3">
-<option value="10">1 ХЕ = 10г</option>
-<option value="12">1 ХЕ = 12г</option>
-</select>
-</div>
-<div class="text-center mt-6">
-<div id="xeResult" class="text-4xl font-bold">0 ХЕ</div>
-</div>
-</div>
-</div>
-
-<!-- PROFILE -->
-<div id="profilePage" class="page">
-<div class="glass rounded-3xl p-6 text-center">
-<iconify-icon icon="solar:user-circle-linear" width="60"></iconify-icon>
-<div class="mt-4 text-xl font-semibold">Профиль</div>
-<div class="text-gray-500 mb-4">Healthier пользователь</div>
-
-<h3 class="mb-2 font-semibold">Достижения</h3>
-<div class="flex gap-3 justify-center flex-wrap" id="giftsContainer">
-    <div class="gift" data-name="Маленький Обжора" data-desc="Перестал переедать 🍔">🍔</div>
-    <div class="gift" data-name="Сахарный график" data-desc="Заполнил полностью график сахара 🏆">🏆</div>
-</div>
-</div>
-</div>
-
+<!-- MODAL -->
+<div id="giftModal" class="modal">
+  <h3 id="giftTitle">Название</h3>
+  <p id="giftDesc">Описание</p>
+  <button onclick="closeModal()">Закрыть</button>
 </div>
 
 <!-- DOCK -->
-<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-lg dock px-6 py-3 flex justify-between items-center">
-<button onclick="openPage('home')" class="flex flex-col items-center text-xs">
-<iconify-icon icon="solar:home-linear" width="24"></iconify-icon>
-Главная
-</button>
-<button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-xs">
-<iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>
-ХЕ
-</button>
-<button onclick="openPage('platePage')" class="flex flex-col items-center text-xs">
-<iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>
-День
-</button>
-<button onclick="openPage('profilePage')" class="flex flex-col items-center text-xs">
-<iconify-icon icon="solar:user-linear" width="24"></iconify-icon>
-Профиль
-</button>
-</div>
-
-<!-- GIFT MODAL -->
-<div id="giftModal" class="fixed inset-0 flex items-center justify-center bg-black/40 z-50 hidden">
-<div class="glass rounded-2xl p-6 max-w-sm text-center">
-<h3 id="giftName" class="text-lg font-bold mb-2"></h3>
-<p id="giftDesc" class="text-gray-700"></p>
-<button onclick="closeGift()" class="mt-4 glass px-4 py-2 rounded-xl">Закрыть</button>
-</div>
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md dock">
+  <button onclick="openPage('home')" class="flex flex-col items-center text-sm">
+    <iconify-icon icon="solar:home-linear" width="24"></iconify-icon>
+    Главная
+  </button>
+  <button onclick="openPage('calculatorPage')" class="flex flex-col items-center text-sm">
+    <iconify-icon icon="solar:calculator-linear" width="24"></iconify-icon>
+    ХЕ
+  </button>
+  <button onclick="openPage('platePage')" class="flex flex-col items-center text-sm">
+    <iconify-icon icon="solar:plate-linear" width="24"></iconify-icon>
+    День
+  </button>
+  <button onclick="openPage('profilePage')" class="flex flex-col items-center text-sm">
+    <iconify-icon icon="solar:user-linear" width="24"></iconify-icon>
+    Профиль
+  </button>
 </div>
 
 <script>
+// Переходы между страницами
 function openPage(id){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
 // Продукты
 const foodDatabase=[
-{name:"Хлеб пшеничный",portion:"1 кусок (20г)",icon:"solar:bread-linear"},
-{name:"Хлеб ржаной",portion:"1 кусок (25г)",icon:"solar:bread-linear"},
-{name:"Гречка",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{name:"Рис",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{name:"Макароны",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
-{name:"Картофель",portion:"1 средний (90г)",icon:"solar:leaf-linear"},
-{name:"Яблоко",portion:"1 среднее (90г)",icon:"solar:apple-linear"},
-{name:"Апельсин",portion:"150г",icon:"solar:apple-linear"},
-{name:"Банан",portion:"70г",icon:"solar:apple-linear"},
-{name:"Арбуз",portion:"270г",icon:"solar:apple-linear"}
+  {name:"Хлеб пшеничный",portion:"1 кусок (20г)",icon:"solar:bread-linear"},
+  {name:"Хлеб ржаной",portion:"1 кусок (25г)",icon:"solar:bread-linear"},
+  {name:"Гречка",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+  {name:"Рис",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+  {name:"Макароны",portion:"2 ст. ложки (50г)",icon:"solar:plate-linear"},
+  {name:"Картофель",portion:"1 средний (90г)",icon:"solar:leaf-linear"},
+  {name:"Яблоко",portion:"1 среднее (90г)",icon:"solar:apple-linear"},
+  {name:"Апельсин",portion:"150г",icon:"solar:apple-linear"},
+  {name:"Банан",portion:"70г",icon:"solar:apple-linear"},
+  {name:"Арбуз",portion:"270г",icon:"solar:apple-linear"}
 ];
 
 const foodGrid=document.getElementById("foodGrid");
@@ -186,37 +232,35 @@ const xeTotal=document.getElementById("xeTotal");
 let selected=[];
 
 function renderFood(filter=""){
-    foodGrid.innerHTML="";
-    foodDatabase.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase()))
-    .forEach(food=>{
-        const card=document.createElement("div");
-        card.className="glass p-4 rounded-2xl flex justify-between cursor-pointer";
-        card.onclick=()=>addFood(food);
-        card.innerHTML=`
-        <div class="flex gap-3 items-center">
-            <iconify-icon icon="${food.icon}" width="24"></iconify-icon>
-            <div>
-                <div class="font-medium">${food.name}</div>
-                <div class="text-sm text-gray-500">${food.portion} = 1 ХЕ</div>
-            </div>
+  foodGrid.innerHTML="";
+  foodDatabase.filter(f=>f.name.toLowerCase().includes(filter.toLowerCase())).forEach(food=>{
+    const card=document.createElement("div");
+    card.className="glass p-4 rounded-2xl flex justify-between cursor-pointer";
+    card.onclick=()=>addFood(food);
+    card.innerHTML=`
+      <div class="flex gap-3 items-center">
+        <iconify-icon icon="${food.icon}" width="24"></iconify-icon>
+        <div>
+          <div class="font-medium">${food.name}</div>
+          <div class="text-sm text-gray-500">${food.portion} = 1 ХЕ</div>
         </div>
-        <iconify-icon icon="solar:add-circle-linear"></iconify-icon>
-        `;
-        foodGrid.appendChild(card);
-    });
+      </div>
+      <iconify-icon icon="solar:add-circle-linear"></iconify-icon>
+    `;
+    foodGrid.appendChild(card);
+  });
 }
-
 function addFood(food){ selected.push(food); renderPlate(); }
-function removeFood(i){ selected.splice(i,1); renderPlate(); }
+function removeFood(index){ selected.splice(index,1); renderPlate(); }
 function renderPlate(){
-    selectedItems.innerHTML="";
-    selected.forEach((f,i)=>{
-        const row=document.createElement("div");
-        row.className="glass rounded-xl px-3 py-2 flex justify-between";
-        row.innerHTML=`<div>${f.name}</div><button onclick="removeFood(${i})">✕</button>`;
-        selectedItems.appendChild(row);
-    });
-    xeTotal.innerText=selected.length;
+  selectedItems.innerHTML="";
+  selected.forEach((f,i)=>{
+    const row=document.createElement("div");
+    row.className="glass rounded-xl px-3 py-2 flex justify-between";
+    row.innerHTML=`<div>${f.name}</div><button onclick="removeFood(${i})">✕</button>`;
+    selectedItems.appendChild(row);
+  });
+  xeTotal.innerText=selected.length;
 }
 searchInput.addEventListener("input",e=>renderFood(e.target.value));
 renderFood();
@@ -227,13 +271,13 @@ const weightInput=document.getElementById("weightInput");
 const xeType=document.getElementById("xeType");
 const xeResult=document.getElementById("xeResult");
 function calc(){
-    const carbs=parseFloat(carbsInput.value);
-    const weight=parseFloat(weightInput.value);
-    const xe=parseFloat(xeType.value);
-    if(!carbs||!weight){ xeResult.innerText="0 ХЕ"; return; }
-    const total=carbs*weight/100;
-    const result=total/xe;
-    xeResult.innerText=result.toFixed(2)+" ХЕ";
+  const carbs=parseFloat(carbsInput.value);
+  const weight=parseFloat(weightInput.value);
+  const xe=parseFloat(xeType.value);
+  if(!carbs||!weight){ xeResult.innerText="0 ХЕ"; return; }
+  const totalCarbs=carbs*weight/100;
+  const result=totalCarbs/xe;
+  xeResult.innerText=result.toFixed(2)+" ХЕ";
 }
 carbsInput.addEventListener("input",calc);
 weightInput.addEventListener("input",calc);
@@ -241,17 +285,19 @@ xeType.addEventListener("change",calc);
 
 // Подарки
 const gifts=document.querySelectorAll(".gift");
-const giftModal=document.getElementById("giftModal");
-const giftName=document.getElementById("giftName");
+const modal=document.getElementById("giftModal");
+const giftTitle=document.getElementById("giftTitle");
 const giftDesc=document.getElementById("giftDesc");
+
 gifts.forEach(g=>{
-    g.addEventListener("click",()=>{
-        giftName.innerText=g.dataset.name;
-        giftDesc.innerText=g.dataset.desc;
-        giftModal.classList.remove("hidden");
-    });
+  g.addEventListener("click",()=>{
+    giftTitle.innerText=g.dataset.name;
+    giftDesc.innerText=g.dataset.desc;
+    modal.classList.add("show");
+  });
 });
-function closeGift(){ giftModal.classList.add("hidden"); }
+
+function closeModal(){ modal.classList.remove("show"); }
 </script>
 
 </body>
